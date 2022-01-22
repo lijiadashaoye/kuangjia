@@ -11,5 +11,5 @@
 6：没有安装 UI 插件<br/>
 7：this.$bus 调用全局事件传递数据的方法<br/>
 8：this.$axios 调用全局http请求的方法<br/>
-9：this.$sessionSto 调用全局sessionStorage的方法（this.$sessionSto.get(name)）、（this.$sessionSto.set(name,data)）,data若是对象数据，会自动JSON化<br/>
-10：this.$localSto 调用全局localStorage的方法（this.$localSto.get(name)）、（this.$localSto.set(name,data)）,data若是对象数据，会自动JSON化<br/>
+9：this.$sessionSto 调用全局sessionStorage的方法（this.$sessionSto.get(name)、this.$sessionSto.set(name,data)）,data若是对象数据，会自动JSON化<br/>
+10：this.$localSto 调用全局localStorage的方法（this.$localSto.get(name)、this.$localSto.set(name,data)）,data若是对象数据，会自动JSON化<br/>
