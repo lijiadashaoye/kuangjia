@@ -27,7 +27,7 @@ export default {
             return JSON.parse(sessionStorage.getItem(name))
         },
         set: function(name, data) {
-            if (typeof data === 'string') {
+            if (typeof data !== 'object') {
                 sessionStorage.setItem(name, data)
             } else {
                 sessionStorage.setItem(name, JSON.stringify(data))
@@ -40,7 +40,7 @@ export default {
             return JSON.parse(localStorage.getItem(name))
         },
         set: function(name, data) {
-            if (typeof data === 'string') {
+            if (typeof data !== 'object') {
                 localStorage.setItem(name, data)
             } else {
                 localStorage.setItem(name, JSON.stringify(data))
