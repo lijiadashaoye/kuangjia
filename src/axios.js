@@ -19,5 +19,36 @@ axios.interceptors.response.use(response => {
     // 响应失败
     return Promise.reject(error);
 });
+export default {
+    axios,
+    seStorage: {
+        // sessionStorage
+        get: function(name) {
+            return JSON.parse(sessionStorage.getItem(name))
+        },
+        set: function(name, data) {
+            if (typeof data === 'string') {
+                sessionStorage.setItem(name, data)
+            } else {
+                sessionStorage.setItem(name, JSON.stringify(data))
+            }
+        },
+    },
+    loStorage: {
+        // localStorage
+        get: function(name) {
+            return JSON.parse(localStorage.getItem(name))
+        },
+        set: function(name, data) {
+            if (typeof data === 'string') {
+                localStorage.setItem(name, data)
+            } else {
+                localStorage.setItem(name, JSON.stringify(data))
+            }
+        },
+    }
 
-export default axios
+
+
+
+}

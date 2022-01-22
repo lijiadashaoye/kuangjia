@@ -13,7 +13,9 @@
 
 <script>
 export default {
-  created() {},
+  created() {
+    
+  },
   methods: {
     lskdfl(num) {
       this.$router.push({
