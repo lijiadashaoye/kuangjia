@@ -39,14 +39,14 @@ export default {
 };
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 ul {
-  padding: 10px;
-  height: 100%;
-  overflow-y: scroll;
+  padding: 10px 0;
+  height: calc(100% - 20px);
+  overflow-y: auto;
   background: silver;
   li {
-    padding: 6px 0;
+    padding: 6px 10px;
     margin-bottom: 5px;
     &:hover {
       background: slateblue;
