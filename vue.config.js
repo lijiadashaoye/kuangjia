@@ -1,35 +1,63 @@
-let fs = require('fs');
-fs.readFile(`${__dirname}/store.js`, 'utf8', (err, datas) => {
-    let arr = [];
-    if (datas) {
-        let reg1 = /(?=(\/\/\s+)?)Vue.use/ig,
-            reg2 = /(?<=modules:\s+?{)(\s+)?/ig,
-            reg3 = /(?<=(\/\/\s+)?)state/ig,
-            reg4 = /(?=(\/\/\s+)?)export/ig,
-            str = datas.toString();
-        arr = [
-            str.slice(0, str.search(reg1)).replace(/\n/ig, ''),
-            str.slice(str.search(reg1), str.search(reg4)).replace(/\n/ig, ''),
-            str.slice(str.search(reg4), str.search(reg2)),
-            '},// 设置全局store\n',
-            str.slice(str.search(reg3)).replace(/\n/ig, ''),
-        ];
-    } else {
-        arr = [
-            `import Vue from 'vue';\nimport Vuex from 'vuex';\n`,
-            `Vue.use(Vuex);\n`,
-            `export default new Vuex.Store({modules: {`,
-            `},// 设置全局store\n`,
-            `state: {page: 'login'},mutations: {chagePage(state, str) {state.page = str}},actions: {}})`
-        ]
-    }
-    fs.unlink(`${__dirname}/src/store.js`, (err) => {
-        makeStore(arr)
+let fs = require('fs'),
+    http = require('http'),
+    storePath = `${__dirname}/src/uitls/store.js`,
+    routePath = `${__dirname}/src/uitls/router.js`;
+// 自动写入 store.js 文件
+let arr = [
+        `import Vue from 'vue';\nimport Vuex from 'vuex';\n`,
+        `Vue.use(Vuex);let page = sessionStorage.getItem("page"),showNav = sessionStorage.getItem("showNav");`,
+        `export default new Vuex.Store({modules: {`,
+        `}, state: {page:page?page:null /* 记录被选中的导航 */,showNav:showNav?showNav:true/* 导航模式为menu时，导航宽度展开与折叠 */,navCom: "menu" /* 导航的类型（tree或者menu） */
+        },mutations: {
+                /* 退出系统初始化所有数据 */resetDatas(state) {state.page =null;state.showNav= true;state.navCom="menu"},
+                /* 导航点击切换页面 */chagePage(state, str) {state.page = str},
+                /* 导航宽度的展开与折叠 */showNavFn(state, str) {state.showNav = str},
+            },actions: {}})`
+    ],
+    views = [],
+    imports = '',
+    modules = '';
+fs.readdir(`${__dirname}/src/views`, async(err, dir) => {
+        for (let i = 0; i < dir.length; i++) {
+            await new Promise(resolve => {
+                fs.readdir(`${__dirname}/src/views/${dir[i]}`, (err, files) => {
+                    let fileName = files.find(t => /store/.test(t));
+                    views.push({
+                        name: dir[i],
+                        path: `@/views/${dir[i]}/${fileName}`
+                    })
+                    resolve()
+                })
+            })
+        }
+        for (let i = 0; i < views.length; i++) {
+            imports += `import ${views[i].name} from '${views[i].path}';\n`
+            modules += `${views[i].name},`
+        }
+        fs.unlink(storePath, (err) => {
+            fs.writeFile(storePath, `${arr[0]}${imports}${arr[1]}${arr[2]}${modules}${arr[3]}`, (err) => {
+                console.log('写入成功');
+            })
+        })
     })
-})
+    // 自动写入 router.js 文件
 fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
-    new Promise(async res => {
-            let arr = []
+    // await new Promise(res => {
+    //     // 读取本地views文件夹， 从而生成导航数据
+    //     let req = http.request({
+    //         hostname: '127.0.0.1',
+    //         port: 8888,
+    //         path: '/upload',
+    //         method: 'POST',
+    //     })
+    //     req.write(JSON.stringify(dirs));
+    //     req.end();
+    //     res()
+    // })
+
+    // 读取每个页面的router.js文件
+    await new Promise(async res => {
+            let arr = [];
             for (let j = 0; j < dirs.length; j++) {
                 await new Promise(resolve => {
                     fs.readdir(`${__dirname}/src/views/${dirs[j]}`, 'utf8', (err, datas) => {
@@ -37,6 +65,7 @@ fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
                             if (/router/ig.test(datas[i])) {
                                 arr.push(`require('@/views/${dirs[j]}/${datas[i]}').default`)
                             }
+
                         }
                         resolve(arr)
                     })
@@ -45,88 +74,54 @@ fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
             res(arr)
         })
         .then(re => {
-            makeRouter(re)
+            let arr = [`import Vue from 'vue';import VueRouter from 'vue-router';import Login from '@/components/layout/login';
+                            /*  在这个里写新增的全局必用组件  */
+                        
+                            `, `Vue.use(VueRouter);
+                            const routes = [{
+                                name: 'login',
+                                path: '/',
+                                component: Login /* 登录组件 */
+                             }, 
+                             {
+                                name: 'passAction',
+                                path: '/passAction',
+                                component: () =>import('@/components/layout/passAction') /* 修改密码组件 */
+                             },
+                             {
+                                name: 'content',
+                                path: '/content',
+                                component: () =>import('@/components/layout/content')/* 主要内容显示组件 */,children: [`,
+                `]}];\nconst router = new VueRouter({
+                                mode: 'history',
+                                base: process.env.BASE_URL,
+                                routes
+                             });
+                        /* 重写路由push方法，防止点击同一个路由时报错 */const originalPush = VueRouter.prototype.push;\nVueRouter.prototype.push = function push(location, onResolve, onReject) {if (onResolve || onReject) {return originalPush.call(this, location, onResolve, onReject)} else {return originalPush.call(this, location).catch(err => err)}};\nexport default router`
+            ]
+            fs.unlink(routePath, (err) => {
+                let strs = `${arr[0]}${arr[1]}${re}${arr[2]}`
+                fs.writeFile('./src/uitls/router.js', strs, (err) => {
+                    console.log('写入成功')
+                })
+            })
+
         })
 })
-
-// 自动写入 store 文件
-function makeStore(arr) {
-    new Promise(res => {
-            let arr = [];
-            fs.readdir(`${__dirname}/src/views`, async(err, dir) => {
-                for (let i = 0; i < dir.length; i++) {
-                    await new Promise(resolve => {
-                        fs.readdir(`${__dirname}/src/views/${dir[i]}`, (err, files) => {
-                            let fileName = files.find(t => /store/.test(t));
-                            arr.push({
-                                name: dir[i],
-                                path: `./views/${dir[i]}/${fileName}`
-                            })
-                            resolve()
-                        })
-                    })
+module.exports = {
+    devServer: {
+        open: true,
+        port: '5432',
+        inline: true,
+        proxy: {
+            '/client': {
+                target: 'http://localhost:8888',
+                changeOrigin: true,
+                pathRewrite: {
+                    // 忽略特定的 url 字符串
+                    '^/client': '/'
                 }
-                res(arr)
-            })
-        })
-        .then(res => {
-            let imports = '',
-                module = '';
-            for (let i = 0; i < res.length; i++) {
-                imports += `import ${res[i].name} from '${res[i].path}';\n`
-                module += `${res[i].name},`
-            }
-            fs.writeFile('./src/store.js', `${arr[0]}${imports}${arr[1]}${arr[2]}${module}${arr[3]}${arr[4]}`, (err) => {
-                console.log('写入成功');
-            })
-        })
-}
-// 自动写入 router 文件
-function makeRouter(re) {
-    fs.readFile(`${__dirname}/src/router.js`, 'utf8', (err, datas) => {
-        let arr = [];
-        if (datas) {
-            let str = datas.toString(),
-                reg1 = /(?=(\/\/\s+)?)Vue.use/ig,
-                reg2 = /(?=(\/\/\s+)?)const routes(\s+)?=/ig,
-                reg3 = /(?=children:(\s+)?\[)/ig,
-                reg4 = /(?=(\/\/\s+)?)const router(\s+)?=/ig,
-                reg5 = /(?=(\/\/\s+)?)export/ig;
-            arr = [
-                str.slice(0, str.search(reg1)).replace(/\n/ig, '').split('import').map(s => s ? ((s + '\n')) : '').join('import '),
-                str.slice(str.search(reg1), str.search(reg2)).replace(/\n/ig, ''),
-                str.slice(str.search(reg2), str.search(reg3)).replace(/\n/ig, ''),
-                `children:[`,
-                ']}]\n' + str.slice(str.search(reg4), str.search(reg5)).replace(/\n/ig, ''),
-                str.slice(str.search(reg5)).replace(/\n/ig, ''),
-            ]
-        } else {
-            arr = [
-                `import Vue from 'vue'\nimport VueRouter from 'vue-router';\nimport Login from '@/components/login';\n`,
-                `Vue.use(VueRouter);\n`,
-                `const routes = [{
-        name: 'login',
-        path: '/',
-        component: Login
-    }, {
-        name: 'content',
-        path: '/content',
-        component: () =>
-            import('@/components/content'),`,
-                `children: [`,
-                `]}]\nconst router = new VueRouter({
-        mode: 'history',
-        base: process.env.BASE_URL,
-        routes
-    })`,
-                `export default router`
-            ]
+            },
         }
-        fs.unlink(`${__dirname}/src/router.js`, (err) => {
-            let strs = `${arr[0]}\n${arr[1]}\n${arr[2]}\n${arr[3]}${re}\n${arr[4]}\n${arr[5]}`
-            fs.writeFile('./src/router.js', strs, (err) => {
-                console.log('写入成功')
-            })
-        })
-    })
+    }
 }

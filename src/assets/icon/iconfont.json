@@ -1,0 +1,30 @@
+{
+  "id": "2146066",
+  "name": "全息",
+  "font_family": "iconfont",
+  "css_prefix_text": "icon",
+  "description": "",
+  "glyphs": [
+    {
+      "icon_id": "5220076",
+      "name": "兔子",
+      "font_class": "tuzi",
+      "unicode": "e606",
+      "unicode_decimal": 58886
+    },
+    {
+      "icon_id": "8722432",
+      "name": "可见",
+      "font_class": "kejian",
+      "unicode": "e674",
+      "unicode_decimal": 58996
+    },
+    {
+      "icon_id": "21975205",
+      "name": "不可见",
+      "font_class": "bukejian",
+      "unicode": "e6cb",
+      "unicode_decimal": 59083
+    }
+  ]
+}
