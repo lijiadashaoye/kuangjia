@@ -24,7 +24,7 @@
     </div>
     <div class="content">
       <component :is="navComType"></component>
-      <div>
+      <div class="showContent">
         <router-view></router-view>
       </div>
     </div>
@@ -42,12 +42,11 @@ export default {
       return this.$route.query.username;
     },
     navComType() {
-      // if (this.$route.query.navCom === "menu") {
-      //   return () => import("./nav.menu.vue");
-      // } else {
-      //   return () => import("./nav.tree.vue");
-      // }
-      return () => import("./nav.menu.vue");
+      if (this.$route.query.navCom === "menu") {
+        return () => import("./nav.menu.vue");
+      } else {
+        return () => import("./nav.tree.vue");
+      }
     },
   },
   created() {
@@ -159,8 +158,12 @@ export default {
 .content {
   height: 100%;
   display: flex;
+  .showContent {
+    width: 100%;
+    height: 100%;
+    overflow-y: auto;
+  }
 }
-
 .pages {
   height: 100%;
   overflow-y: auto;

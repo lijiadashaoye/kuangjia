@@ -1,23 +1,21 @@
 <template>
   <div
     class="navWap"
-    :style="{ width: $store.state.showNav ? '240px' : '65px' }"
+    :style="{
+      'flex-shrink': 0,
+      width: $store.state.showNav ? '250px' : '64px',
+    }"
   >
     <div class="changeNavShow">
       <div v-show="$store.state.showNav">
         <span @click="toMainPage">代码工厂框架</span>
       </div>
-      <div>
-        <i
-          class="el-icon-s-fold"
-          v-if="$store.state.showNav"
-          @click="$store.commit('showNavFn', false)"
-        ></i>
-        <i
-          class="el-icon-s-unfold"
-          v-else
-          @click="$store.commit('showNavFn', true)"
-        ></i>
+      <div
+        @click="$store.commit('showNavFn')"
+        :title="$store.state.showNav ? '缩小导航' : '放大导航'"
+      >
+        <i class="el-icon-s-fold" v-if="$store.state.showNav"></i>
+        <i class="el-icon-s-unfold" v-else></i>
       </div>
     </div>
 
@@ -29,6 +27,7 @@
       :collapse="!$store.state.showNav"
       @select="selectFn"
     >
+
       <Submenu :navList="navList"></Submenu>
     </el-menu>
   </div>
@@ -84,8 +83,8 @@ export default {
   border-radius: 2px;
   background-color: rgb(112, 170, 252);
 }
-// 所以用scss变量
-$height: 40px;
+// 使用用scss变量
+$height: 50px;
 .navWap {
   display: grid;
   grid-template-rows: $height calc(100% - #{$height});
@@ -103,10 +102,11 @@ $height: 40px;
   border-right: 1px solid rgb(228, 225, 225);
   border-bottom: 1px solid rgb(228, 225, 225);
   box-sizing: border-box;
+  vertical-align: text-bottom;
   > div:nth-of-type(1) {
     width: 100%;
     padding-left: 10px;
-    > span {
+    > span:nth-child(1) {
       cursor: pointer;
       font-size: 22px;
       font-weight: bold;
@@ -118,8 +118,12 @@ $height: 40px;
   }
   > div:nth-of-type(2) {
     cursor: pointer;
-    padding: 0 5px;
+    padding: 5px 10px;
     flex-shrink: 0;
+    border-radius: 3px;
+    &:hover {
+      background: rgb(212, 209, 209);
+    }
   }
 }
 .elMenu {
@@ -128,6 +132,7 @@ $height: 40px;
   height: 100%;
   overflow-y: auto;
   padding: 10px 0 20px 0;
-  width:100%;
+  width: 100%;
 }
+
 </style>

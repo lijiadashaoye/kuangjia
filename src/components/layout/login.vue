@@ -167,12 +167,34 @@ export default {
                     rember: this.rember,
                   });
                 }
-                this.$router.push({
-                  name: "content",
-                  query: {
-                    username: res.username,
-                  },
-                });
+                this.$confirm(
+                  "使用基于 elemtntUI 组件的什么类型的导航？",
+                  "提示",
+                  {
+                    confirmButtonText: "NavMenu 导航菜单",
+                    cancelButtonText: "Tree 树形控件",
+                    closeOnClickModal: false,
+                    showClose: false,
+                  }
+                )
+                  .then(() => {
+                    this.$router.push({
+                      name: "content",
+                      query: {
+                        username: res.username,
+                        navCom: "menu",
+                      },
+                    });
+                  })
+                  .catch(() => {
+                    this.$router.push({
+                      name: "content",
+                      query: {
+                        username: res.username,
+                        navCom: "tree",
+                      },
+                    });
+                  });
               }
             });
           }

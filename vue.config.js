@@ -7,11 +7,11 @@ let arr = [
         `import Vue from 'vue';\nimport Vuex from 'vuex';\n`,
         `Vue.use(Vuex);let page = sessionStorage.getItem("page"),showNav = sessionStorage.getItem("showNav");`,
         `export default new Vuex.Store({modules: {`,
-        `}, state: {page:page?page:null /* 记录被选中的导航 */,showNav:showNav?showNav:true/* 导航模式为menu时，导航宽度展开与折叠 */,navCom: "menu" /* 导航的类型（tree或者menu） */
+        `}, state: {page:page?page:null /* 记录被选中的导航 */,showNav:showNav?showNav:true/* 导航模式为menu时，导航宽度展开与折叠 */
         },mutations: {
-                /* 退出系统初始化所有数据 */resetDatas(state) {state.page =null;state.showNav= true;state.navCom="menu"},
+                /* 退出系统初始化所有数据 */resetDatas(state) {state.page =null;state.showNav= true},
                 /* 导航点击切换页面 */chagePage(state, str) {state.page = str},
-                /* 导航宽度的展开与折叠 */showNavFn(state, str) {state.showNav = str},
+                /* 导航宽度的展开与折叠 */showNavFn(state) {state.showNav = !state.showNav},
             },actions: {}})`
     ],
     views = [],
@@ -115,11 +115,11 @@ module.exports = {
         inline: true,
         proxy: {
             '/client': {
-                target: 'http://localhost:8888',
+                target: 'http://localhost:8888/',
                 changeOrigin: true,
                 pathRewrite: {
                     // 忽略特定的 url 字符串
-                    '^/client': '/'
+                    '^/client': ''
                 }
             },
         }
