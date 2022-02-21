@@ -65,3 +65,10 @@ body {
     display: flex;
     align-items: center;
 }
+
+// 修改element的默认样式
+$--color-primary: rgb(128,
+47,
+0);
+$--font-path: '~element-ui/lib/theme-chalk/fonts';
+@import "~element-ui/packages/theme-chalk/src/index";

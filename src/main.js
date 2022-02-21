@@ -5,7 +5,7 @@ import store from './uitls/store'
 import fromAxios from './uitls/axios'
 
 import ElementUI from 'element-ui';
-import 'element-ui/lib/theme-chalk/index.css';
+import './uitls/formateCss.scss'
 Vue.use(ElementUI);
 
 Vue.prototype.$bus = new Vue(); //  this.$bus.$emit("busEmit", "busEmit");
