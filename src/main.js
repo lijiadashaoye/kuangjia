@@ -10,9 +10,9 @@ Vue.use(ElementUI);
 
 Vue.prototype.$bus = new Vue(); //  this.$bus.$emit("busEmit", "busEmit");
 Vue.prototype.$axios = fromAxios.axios;
-Vue.prototype.$sessionSto = fromAxios.seStorage;
-Vue.prototype.$localSto = fromAxios.loStorage;
-
+Vue.prototype.$seStorage = fromAxios.seStorage;
+Vue.prototype.$loStorage = fromAxios.loStorage;
+Vue.prototype.$mesh = fromAxios.mesh; // 埋点  this.$mesh({ name: "asdfsad" });
 Vue.config.productionTip = false
 new Vue({
     router,

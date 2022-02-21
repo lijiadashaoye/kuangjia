@@ -1,19 +1,18 @@
 <template>
   <div class="table">
     page1
-     <el-button>默认按钮</el-button>
+    <el-button>默认按钮</el-button>
     <router-view />
   </div>
 </template>
 
 <script>
 export default {
-  created() {
-    
+  data() {
+    return {};
   },
-  methods: {
-  
-  },
+  created() {},
+  methods: {},
 };
 </script>
 

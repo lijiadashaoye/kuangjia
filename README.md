@@ -14,8 +14,8 @@ npm run build：打包
 6：没有安装 UI 插件<br/>
 7：this.$bus 调用全局事件传递数据的方法<br/>
 8：this.$axios 调用全局http请求的方法<br/>
-9：this.$sessionSto 调用全局sessionStorage的方法（this.$sessionSto.get(name)、this.$sessionSto.set(name,data)）,data若是对象数据，会自动JSON化<br/>
-10：this.$localSto 调用全局localStorage的方法（this.$localSto.get(name)、this.$localSto.set(name,data)）,data若是对象数据，会自动JSON化<br/>
+9：this.$seStorage 调用全局seStoragerage的方法（this.$seStorage.get(name)、this.$seStorage.set(name,data)）,data若是对象数据，会自动JSON化<br/>
+10：this.$loStorage 调用全局loStoragerage的方法（this.$loStorage.get(name)、this.$loStorage.set(name,data)）,data若是对象数据，会自动JSON化<br/>
 11：全局的样式写在 @/uitls/formateCss.scss<br/>
 12：图标主要用elementUI里的图标，如果无法满足，可以用阿里图库：https://www.iconfont.cn/，然后把图标文件放入 assets/icon 里<br/>
 13：全局的图片文件放在 @/assets/img 里<br/>

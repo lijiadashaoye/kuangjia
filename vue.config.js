@@ -5,7 +5,7 @@ let fs = require('fs'),
 // 自动写入 store.js 文件
 let arr = [
         `import Vue from 'vue';\nimport Vuex from 'vuex';\n`,
-        `Vue.use(Vuex);let page = sessionStorage.getItem("page"),showNav = sessionStorage.getItem("showNav");`,
+        `Vue.use(Vuex);let page = localStorage.getItem("page"),showNav = localStorage.getItem("showNav");`,
         `export default new Vuex.Store({modules: {`,
         `}, state: {page:page?page:null /* 记录被选中的导航 */,showNav:showNav?showNav:true/* 导航模式为menu时，导航宽度展开与折叠 */
         },mutations: {

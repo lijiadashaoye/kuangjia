@@ -85,8 +85,15 @@ let loStorage = {
     },
 }
 
+// 埋点函数
+function mesh(params) {
+    axios.post('/client/upload', params)
+        .then(res => console.log(res))
+}
+
 export default {
     axios,
     seStorage,
-    loStorage
+    loStorage,
+    mesh
 }

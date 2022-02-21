@@ -119,11 +119,11 @@ export default {
   beforeCreate() {
     // 重置数据
     this.$store.commit("resetDatas");
-    this.$sessionSto.clear("navList");
-    this.$sessionSto.clear("token");
+    this.$seStorage.clear("navList");
+    this.$seStorage.clear("token");
   },
   mounted() {
-    let userInfo = this.$localSto.get("userInfo");
+    let userInfo = this.$loStorage.get("userInfo");
     if (userInfo) {
       this.loginForm.username = userInfo.username;
       this.loginForm.password = userInfo.password;
@@ -157,11 +157,12 @@ export default {
               data: params,
             }).then((res) => {
               if (res) {
-                this.$sessionSto.set("navList", res.navList);
-                this.$sessionSto.set("token", res.token);
+                this.$seStorage.set("navList", res.navList);
+                this.$seStorage.set("token", res.token);
+                this.$seStorage.set("username", res.username);
                 // 根据服务器返回的数据决定使用的nav组件类型
                 if (this.rember) {
-                  this.$localSto.set("userInfo", {
+                  this.$loStorage.set("userInfo", {
                     password: res.password,
                     username: res.username,
                     rember: this.rember,
@@ -178,21 +179,15 @@ export default {
                   }
                 )
                   .then(() => {
+                    this.$seStorage.set("navCom", "menu");
                     this.$router.push({
                       name: "content",
-                      query: {
-                        username: res.username,
-                        navCom: "menu",
-                      },
                     });
                   })
                   .catch(() => {
+                    this.$seStorage.set("navCom", "tree");
                     this.$router.push({
                       name: "content",
-                      query: {
-                        username: res.username,
-                        navCom: "tree",
-                      },
                     });
                   });
               }

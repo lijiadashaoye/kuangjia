@@ -1,6 +1,6 @@
 var http = require("http");
 let makeNav = [{
-    id: '1',
+    id: '11',
     label: 'page1',
     icon: 'el-icon-location',
     children: [{
@@ -34,10 +34,10 @@ let makeNav = [{
         }]
     }]
 }, {
-    id: '3',
-    label: 'page3',
+    id: '1',
+    label: 'page1',
     icon: 'el-icon-video-camera-solid',
-}]; // 实时生成导航数据
+}]; // 导航数据
 
 http.createServer(function(request, response) {
     response.writeHead(200, {
@@ -55,40 +55,12 @@ http.createServer(function(request, response) {
         switch (url) {
             // 用来上传文件，但目前没用
             case 'upload':
-                makeNav = [];
                 request.on('data', c => {
                     data.push(c)
                 })
                 request.on('end', () => {
                     let arr = JSON.parse(data.toString());
-                    arr.forEach((str, ind) => {
-                        makeNav.push({
-                            id: `${ind + 1}`,
-                            label: str,
-                            icon: 'el-icon-location',
-                        }, {
-                            id: '2',
-                            label: 'page2',
-                            icon: 'el-icon-video-camera-solid',
-                            children: [{
-                                id: '2-1',
-                                label: 'page2-1',
-                                children: [{
-                                    id: '2-1-1',
-                                    label: 'page2-1-1',
-                                    children: [{
-                                            id: '2-1-1-1',
-                                            label: 'page2-1-1-1'
-                                        },
-                                        {
-                                            id: '2-1-1-2',
-                                            label: 'page2-1-1-2'
-                                        },
-                                    ]
-                                }]
-                            }]
-                        })
-                    });
+                    response.end(JSON.stringify(arr));
                 });
                 break;
             case 'system':

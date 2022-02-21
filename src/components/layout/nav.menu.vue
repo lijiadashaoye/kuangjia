@@ -27,7 +27,6 @@
       :collapse="!$store.state.showNav"
       @select="selectFn"
     >
-
       <Submenu :navList="navList"></Submenu>
     </el-menu>
   </div>
@@ -38,13 +37,12 @@ export default {
   components: { Submenu: () => import("./submenu") },
   computed: {
     navList() {
-      return this.$sessionSto.get("navList");
+      return this.$seStorage.get("navList");
     },
   },
   methods: {
     selectFn(t) {
-      console.log(t);
-      // $store.commit("chagePage", t);
+      this.$store.commit("chagePage", t);
     },
     toMainPage() {
       this.$confirm(
@@ -134,5 +132,4 @@ $height: 50px;
   padding: 10px 0 20px 0;
   width: 100%;
 }
-
 </style>

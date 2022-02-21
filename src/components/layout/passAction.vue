@@ -143,13 +143,13 @@ export default {
           return;
         }
         if (this.rember) {
-          this.$localSto.set("userInfo", {
+          this.$loStorage.set("userInfo", {
             userName: this.userName,
             password: this.password1,
             rember: true,
           });
         } else {
-          this.$localSto.clear("userInfo");
+          this.$loStorage.clear("userInfo");
         }
         this.$router.push({
           name: "login",

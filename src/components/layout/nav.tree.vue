@@ -30,13 +30,11 @@
 export default {
   computed: {
     navList() {
-      return this.$sessionSto.get("navList");
+      return this.$seStorage.get("navList");
     },
   },
-  mounted() {
-    // .el-tree-node__content
-  },
   methods: {
+    // 修改tree 前的图标
     handleNodeClick(...node) {
       if (node[1].level === 1 && !node[1].isLeaf) {
         this.$nextTick(() => {
@@ -53,7 +51,11 @@ export default {
           father.insertBefore(span, father.children[0]);
         });
       }
+      if (node[1].isLeaf) {
+        this.$store.commit("chagePage", node[0].id);
+      }
     },
+    //
     toMainPage() {
       this.$confirm(
         "退出并清空所有之前的操作，使页面回到刚登录状态！",

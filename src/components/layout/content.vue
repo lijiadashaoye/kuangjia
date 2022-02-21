@@ -39,10 +39,10 @@ export default {
   },
   computed: {
     user() {
-      return this.$route.query.username;
+      return this.$seStorage.get("username");
     },
     navComType() {
-      if (this.$route.query.navCom === "menu") {
+      if (this.$seStorage.get("navCom") === "menu") {
         return () => import("./nav.menu.vue");
       } else {
         return () => import("./nav.tree.vue");
@@ -50,7 +50,7 @@ export default {
     },
   },
   created() {
-    if (!this.$sessionSto.get("token")) {
+    if (!this.$seStorage.get("token")) {
       this.$message.error("请登录！");
       setTimeout(() => {
         this.$router.push({ name: "login" });
@@ -80,7 +80,7 @@ export default {
     // mousemove:鼠标在某元素上移动时触发，即使在其子元素上也会触发。触发的频率很高
     // 右上角退出、修改密码
     toWhere(name) {
-      if (name === "login" && this.$localSto.get("userInfo")) {
+      if (name === "login" && this.$loStorage.get("userInfo")) {
         this.$confirm("是否清除当前登录用户的数据？", "提示", {
           confirmButtonText: "保留数据",
           cancelButtonText: "清除数据",
@@ -93,7 +93,9 @@ export default {
             });
           })
           .catch(() => {
-            this.$localSto.clear("userInfo");
+            this.$loStorage.clear("userInfo");
+            this.$loStorage.clear("username");
+            this.$loStorage.clear("navCom");
             this.$router.push({
               name: name,
             });
@@ -159,6 +161,7 @@ export default {
     width: 100%;
     height: 100%;
     overflow-y: auto;
+    background: rgb(190, 131, 131);
   }
 }
 .pages {
