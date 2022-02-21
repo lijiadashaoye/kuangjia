@@ -108,8 +108,6 @@ export default {
   },
 };
 </script>
-
-
 <style lang="scss" scoped>
 .wap {
   height: 100%;

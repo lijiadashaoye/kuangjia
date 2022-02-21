@@ -53,6 +53,7 @@ http.createServer(function(request, response) {
 
     if (!reg.test(url)) {
         switch (url) {
+            // 用来上传文件，但目前没用
             case 'upload':
                 makeNav = [];
                 request.on('data', c => {
@@ -118,13 +119,6 @@ http.createServer(function(request, response) {
                     ]
                 }
                 response.end(JSON.stringify(obj));
-                break;
-            case 'new':
-                response.end(JSON.stringify([
-                    "tip1 tip1 tip1 tip1 tip1 tip1 tip1 ",
-                    "新增某某某，某某某某",
-                    "修改某某某某某某某某某某某某，某某某某",
-                ]));
                 break;
             case 'login':
                 // 用户登录
