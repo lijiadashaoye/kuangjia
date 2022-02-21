@@ -14,6 +14,7 @@ Vue.prototype.$seStorage = fromAxios.seStorage;
 Vue.prototype.$loStorage = fromAxios.loStorage;
 Vue.prototype.$mesh = fromAxios.mesh; // 埋点  this.$mesh({ name: "asdfsad" });
 Vue.config.productionTip = false
+
 new Vue({
     router,
     store,

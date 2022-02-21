@@ -1,7 +1,8 @@
 <template>
   <div class="table">
     page1
-    <el-button>默认按钮</el-button>
+
+    <el-button @click="toRoute">跳转子页面</el-button>
     <router-view />
   </div>
 </template>
@@ -9,10 +10,19 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      page: "1-1",
+    };
   },
   created() {},
-  methods: {},
+  methods: {
+    toRoute() {
+      this.$router.push({
+        name: this.page === "1-1" ? "1-2" : "1-1",
+      });
+      this.page = this.page === "1-1" ? "1-2" : "1-1";
+    },
+  },
 };
 </script>
 

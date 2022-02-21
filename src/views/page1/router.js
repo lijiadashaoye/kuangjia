@@ -1,5 +1,5 @@
 export default {
-    name: '1',
+    name: 'page1_router',
     path: '/content/1',
     component: () =>
         import ('@/views/page1/index.vue'),

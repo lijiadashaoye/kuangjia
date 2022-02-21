@@ -60,12 +60,12 @@ export default {
     }
   },
   watch: {
-    "$store.state.page": function (t) {
-      if (t !== "login") {
+    "$store.state.page": function (navId) {
+      if (navId !== "login") {
         this.$router.push({
-          path: `/content/${t}`,
+          path: `/content/${navId}`,
           query: {
-            com: t.name,
+            com: navId.name,
           },
         });
       }

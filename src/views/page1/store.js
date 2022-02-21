@@ -1,6 +1,8 @@
 export default {
     namespaced: true,
-    state: {},
+    state: {
+        page1State: 'page1State'
+    },
     mutations: {
 
     },

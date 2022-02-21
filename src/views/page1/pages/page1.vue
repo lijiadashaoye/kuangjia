@@ -1,10 +1,10 @@
 <template>
   <div class="page">
-    page1
+    page1--page1
+    <p>全局的依赖注入</p>
     <p>{{ father }}</p>
     <p>{{ provide1 }}</p>
     <p>{{ provide2 }}</p>
-
   </div>
 </template>
 
@@ -16,9 +16,7 @@ export default {
       console.log(t);
     });
   },
-  methods: {
-   
-  },
+  methods: {},
 };
 </script>
 
