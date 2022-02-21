@@ -78,7 +78,6 @@ export default {
     // mouseover:当鼠标移入某元素时触发，移入和移出其子元素时也会触发。会闪
     // mouseout:当鼠标移出某元素时触发，移入和移出其子元素时也会触发。会闪
     // mousemove:鼠标在某元素上移动时触发，即使在其子元素上也会触发。触发的频率很高
-
     // 右上角退出、修改密码
     toWhere(name) {
       if (name === "login" && this.$localSto.get("userInfo")) {
