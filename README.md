@@ -1,11 +1,10 @@
-# 框架介绍
+### 框架介绍
 自己用vue搭建的框架，主要配置在 vue.config.js 文件里
-# 启动方式
+### 启动方式
 npm run withNode ：会启动一个node服务器（使用 node.js 文件），一个完整的本地开发环境 <br/>
 npm start：只运行vue，需要在login.vue组件的login方法里修改代码<br/>
 npm run build：打包
-
-# 项目结构
+### 项目结构
 1：不需要写主要的router和store文件，项目启动时会自动生成，但需要用在全局的组件，需要在vue.config.js 文件的<br/> /*  在这个里写新增的全局组件  */ 底下写入import文件及在下边写好路由配置<br/>
 2：服务器返回导航数据，在 @/components/nav 文件里生成导航组件<br/>
 3：@/components/login 是登陆页面，也是项目启动后最先展示的页面<br/>
@@ -21,7 +20,7 @@ npm run build：打包
 13：全局的图片文件放在 @/assets/img 里<br/>
 14：可以在 @/uitls/formateCss.scss 里写全局css样式以及对elementUI样式的更改<br/>
 15：在 @/components/layout/content.vue 里通过判断是否有 token 验证是否已登录，若没有自动跳到登录页面<br/>
-##### 文件目录
+### 文件目录
 project        
   |--public  // index.html和ico文件          
   |--package.json   // 项目包      
