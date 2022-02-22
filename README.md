@@ -26,7 +26,7 @@ project
   |--package.json   // 项目包      
   |--vue.config.js  // 项目配置及自动生成store、router文件配置        
   |--src       
-      |--assets    // 图片和图标文件         
+        |--assets    // 图片和图标文件         
       |--icon // 如果使用其他图标（如阿里图标库）则放到这里      
       |--img  // 项目中使用的图片       
       |--components  // 布局组件及公共组件保存位置          
