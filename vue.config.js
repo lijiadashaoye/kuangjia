@@ -108,6 +108,13 @@ fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
 
         })
 })
+
+// const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+// const CompressionPlugin = require("compression-webpack-plugin")
+// const ExtractTextPlugin=require('extract-text-webpack-plugin')
+// var path = require('path');
+// var webpack = require('webpack');
+
 module.exports = {
     devServer: {
         open: true,
@@ -123,5 +130,79 @@ module.exports = {
                 }
             },
         }
-    }
+    },
+    // entry: {
+    //     vendor: [ // 这里填写须要的依赖库
+    //         'babel-polyfill',
+    //         'axios',
+    //         'vue/dist/vue.common.js',
+    //         'vue-router',
+    //         'vuex',
+    //     ]
+    // },
+    // output: {
+    //     path: path.resolve(__dirname, '../static/js'),
+    //     filename: '[name].dll.js',
+    //     library: '[name]_library'
+    // },
+    // module: {
+    //     rules: [{
+    //             test: /\.vue$/,
+    //             loader: 'vue-loader'
+    //         },
+    //         {
+    //             test: /\.js$/,
+    //             loader: 'babel-loader',
+    //             exclude: /node_modules/
+    //         }
+    //     ]
+    // },
+    // plugins: [
+    //     new webpack.DllPlugin({
+    //         path: path.join(__dirname, '.', '[name]-manifest.json'),
+    //         libraryTarget: 'commonjs2',
+    //         name: '[name]_library'
+    //     }),
+    //     new webpack.optimize.UglifyJsPlugin({
+    //         compress: {
+    //             warnings: false
+    //         }
+    //     }),
+    //     new webpack.DllReferencePlugin({
+    //         context: path.resolve(__dirname, '..'),
+    //         manifest: require("./build/bundle.manifest.json"),
+    //     })
+    // ],
+
+    // configureWebpack: config => {
+    //     config.plugins = config.plugins.concat(
+    //         [
+    //             new UglifyJsPlugin({
+    //                 uglifyOptions: {
+    //                     compress: {
+    //                         unused: true, //是否去掉未关联的函数和变量
+    //                         warnings: true, //是否去掉告警
+    //                         drop_debugger: true, //自动删除debugger
+    //                         drop_console: true, //自动删除console.log
+    //                         pure_funcs: ['consoe.log'],
+    //                     }
+    //                 },
+
+    //                 parallel: true //多通道并处理
+    //             }),
+    //             // new ExtractTextPlugin({
+    //             //     filename: utils.assetsPath('css/[name].[contenthash].css'),
+    //             //     allChunks: false,
+    //             // }),
+    //             // new CompressionPlugin({
+    //             //     test: /\.(js|css|less)$/, // 匹配文件名
+    //             //     threshold: 10240, // 对超过10k的数据压缩
+    //             //     minRatio: 0.8,
+    //             //     deleteOriginalAssets: true // 删除源文件
+    //             // })
+    //         ]
+    //     );
+
+
+    // }
 }
