@@ -22,7 +22,7 @@ npm run build：打包
 15：在 @/components/layout/content.vue 里通过判断是否有 token 验证是否已登录，若没有自动跳到登录页面<br/>
 ### 文件目录
 project        
-  |--public  // index.html和ico文件          
+	|--public  // index.html和ico文件          
   |--package.json   // 项目包      
   |--vue.config.js  // 项目配置及自动生成store、router文件配置        
   |--src       
