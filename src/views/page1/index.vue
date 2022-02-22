@@ -3,6 +3,7 @@
     <div class="pageHeader">
       <span>page1,页面头部</span>
       <el-button @click="toRoute">跳转子页面</el-button>
+       
     </div>
     <div class="pageContent">
       <router-view />

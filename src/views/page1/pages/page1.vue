@@ -5,10 +5,12 @@
     <p>{{ father }}</p>
     <p>{{ provide1 }}</p>
     <p>{{ provide2 }}</p>
+     <el-button @click="readExcel">读取excel文件</el-button>
   </div>
 </template>
 
 <script>
+
 export default {
   inject: ["father", "provide1", "provide2"],
   created() {
@@ -16,7 +18,11 @@ export default {
       console.log(t);
     });
   },
-  methods: {},
+  methods: {
+    readExcel(){
+      
+    }
+  },
 };
 </script>
 
