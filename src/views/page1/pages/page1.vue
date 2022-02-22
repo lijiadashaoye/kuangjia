@@ -23,5 +23,6 @@ export default {
 <style scoped>
 .page {
   color: blue;
+  height:1000px;
 }
 </style>

@@ -65,22 +65,7 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-::-webkit-scrollbar {
-  width: 4px;
-  background-color: #f5f5f5;
-}
 
-/*定义滚动条轨道 内阴影+圆角*/
-::-webkit-scrollbar-track {
-  box-shadow: inset 0 0 2px rgba(236, 234, 234, 0.3);
-  background-color: #f5f5f5;
-}
-
-/*定义滑块 内阴影+圆角*/
-::-webkit-scrollbar-thumb {
-  border-radius: 2px;
-  background-color: rgb(112, 170, 252);
-}
 // 使用用scss变量
 $height: 50px;
 .navWap {

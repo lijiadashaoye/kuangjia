@@ -1,9 +1,12 @@
 <template>
-  <div class="table">
-    page1
-
-    <el-button @click="toRoute">跳转子页面</el-button>
-    <router-view />
+  <div class="ereryPage">
+    <div class="pageHeader">
+      <span>page1,页面头部</span>
+      <el-button @click="toRoute">跳转子页面</el-button>
+    </div>
+    <div class="pageContent">
+      <router-view />
+    </div>
   </div>
 </template>
 
@@ -26,8 +29,20 @@ export default {
 };
 </script>
 
-<style scoped>
-.table {
+<style scoped lang="scss">
+$pageHeaderHeight: 80px;
+.ereryPage {
   background: rgb(205, 170, 238);
+  height: 100%;
+  overflow: hidden;
+  display: grid;
+  grid-template-rows: $pageHeaderHeight calc(100% - #{$pageHeaderHeight});
+}
+.pageHeader {
+  background: rgb(170, 238, 185);
+}
+.pageContent {
+  height: 100%;
+  overflow-y: auto;
 }
 </style>
