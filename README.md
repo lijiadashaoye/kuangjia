@@ -49,7 +49,7 @@ project
 ----------|--page1      
 --------------|--pages // 当前导航页面中用到的子组件保存位置        
 --------------|--index.vue  // 当前导航的主页面      
---------------|--router.js  // 当前导航的独立router配置，以 path: `/content/${navId}`,形式跳转,navId为服务器给的导航id          
+--------------|--router.js  // 当前导航的router配置：path:`/content/${navId}`,navId为服务器给的导航id          
 --------------|--store.js   // 当前导航的独立store配置，到时候自动以文件夹名字进行命名空间调用，如this.$store.state.page1.page1State      
 ----------|--main.js         
 ----------|--test.xlsx  //      @/views/page1/pages/page1.vue 页面里的读取excel示例
