@@ -22,7 +22,7 @@ export default {
   methods: {
     toRoute() {
       this.$router.push({
-        name: this.page === "1-1" ? "1-2" : "1-1",
+        name: this.page
       });
       this.page = this.page === "1-1" ? "1-2" : "1-1";
     },
@@ -31,9 +31,9 @@ export default {
 </script>
 
 <style scoped lang="scss">
-$pageHeaderHeight: 80px;
+$pageHeaderHeight: 50px;
 .ereryPage {
-  background: rgb(205, 170, 238);
+  background: rgb(230, 234, 248);
   height: 100%;
   overflow: hidden;
   display: grid;

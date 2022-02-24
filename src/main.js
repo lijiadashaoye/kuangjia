@@ -8,15 +8,12 @@ import ElementUI from 'element-ui';
 import './uitls/formateCss.scss'
 Vue.use(ElementUI);
 
-import XLSX from "xlsx";
-
 Vue.prototype.$bus = new Vue(); //  this.$bus.$emit("busEmit", "busEmit");
 Vue.prototype.$axios = fromAxios.axios;
 Vue.prototype.$seStorage = fromAxios.seStorage;
 Vue.prototype.$loStorage = fromAxios.loStorage;
 Vue.prototype.$mesh = fromAxios.mesh; // 埋点  this.$mesh({ name: "asdfsad" });
 Vue.config.productionTip = false
-Vue.prototype.$xlsx = XLSX;
 
 new Vue({
     router,
