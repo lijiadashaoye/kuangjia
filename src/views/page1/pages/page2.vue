@@ -31,7 +31,7 @@
             >
             <el-button
               v-show="readData.length > 0"
-              type="primary"
+              type="warning"
               @click="writeExcel(2)"
               >保存为文件</el-button
             >
@@ -44,15 +44,12 @@
 </template>
 
 <script>
-import { read, utils, writeFileXLSX } from "xlsx";
-/* 尝试读取文件名和解析 utils */
-// export function readFile(filename: string, opts?: ParsingOptions): WorkBook;
+import { read, utils, writeFile } from "xlsx";
 // /* 尝试解析数据 */
 // export function read(data: any, opts?: ParsingOptions): WorkBook;
-// /* 试图将工作簿数据写入或下载到文件中 */
-// export function writeFile(data: WorkBook, filename: string, opts?: WritingOptions): any;
 // /* 试图写入或下载工作簿数据到XLSX文件 */
-// export function writeFileXLSX(data: WorkBook, filename: string, opts?: WritingOptions): any;
+// export function writeFile(data: WorkBook, filename: string, opts?: WritingOptions): any;
+
 // Array.from({ length: 6 }, () => ({ age: 20 }))  // 可以生成指定数量及数据的数组
 export default {
   inject: ["father", "provide1", "provide2"],
@@ -89,7 +86,6 @@ export default {
           workbook = read(data),
           sheetNames = workbook.SheetNames, // 工作表名称集合
           worksheet = workbook.Sheets[sheetNames[0]]; // 这里我们只读取第一张sheet1
-
         utils.sheet_to_json(worksheet, { range: this.range }).forEach((t) => {
           let tar = this.readData.find((d) => d.id === t["ID"]);
           if (!tar) {
@@ -135,10 +131,10 @@ export default {
           ),
           wb = utils.book_new();
         // ws['!cols']：列属性对象的数组，设置列宽
-        ws["!cols"] = [{ wch: 8 }, { wch: 15 }, { wch: 15 }];
+        ws["!cols"] = [{ wch: 5 }, { wch: 15 }, { wch: 15 }];
         // ws['!rows']: 行属性对象数组，设置行高
         ws["!rows"] = [{ hpx: 40 }].concat(
-          Array.from({ length: this.readData.length }, () => ({ hpx: 20 }))
+          Array.from({ length: this.readData.length + 1 }, () => ({ hpx: 22 }))
         );
         // 合并单元格
         ws["!merges"] = [
@@ -155,11 +151,11 @@ export default {
             },
           },
         ];
-        // 大写26个字母
+        // 生成大写26个字母组成的数组
         let UpperCase = Array.from({ length: 26 }, (...t) =>
           String.fromCharCode(t[1] + 65)
         );
-        // 小写26个字母
+        // 生成小写26个字母组成的数组
         // let lowerCase = Array.from({ length: 26 }, (...t) =>
         //   String.fromCharCode(t[1] + 97)
         // );
@@ -190,7 +186,7 @@ export default {
           month = date.getMonth() + 1,
           day = date.getDate(),
           time = date.toTimeString().split(" ")[0].split(":").join(":");
-        writeFileXLSX(wb, `${year}-${month}-${day} ${time}.xlsx`);
+        writeFile(wb, `${year}-${month}-${day} ${time}.xlsx`);
       }
     },
   },
