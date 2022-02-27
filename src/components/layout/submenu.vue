@@ -44,6 +44,7 @@ export default {
 
   .el-submenu__title .el-icon-location {
     margin: 0;
+   
   }
 }
 .el-menu--vertical .subMenu .el-submenu__title span {

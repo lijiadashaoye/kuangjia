@@ -1,42 +1,42 @@
 var http = require("http");
 let makeNav = [{
-    id: '11',
+    id: '1',
     label: 'page1',
-    icon: 'el-icon-location',
-    children: [{
-            id: '1-1',
-            label: 'page1-1'
-        },
-        {
-            id: '1-2',
-            label: 'page1-2'
-        },
-    ]
+    icon: 'el-icon-video-camera-solid',
 }, {
     id: '2',
     label: 'page2',
+    icon: 'el-icon-location',
+    children: [{
+            id: '2-1',
+            label: 'page2-1'
+        },
+        {
+            id: '2-2',
+            label: 'page2-2'
+        },
+    ]
+}, {
+    id: '3',
+    label: 'page3',
     icon: 'el-icon-video-camera-solid',
     children: [{
-        id: '2-1',
-        label: 'page2-1',
+        id: '3-1',
+        label: 'page3-1',
         children: [{
-            id: '2-1-1',
-            label: 'page2-1-1',
+            id: '3-1-1',
+            label: 'page3-1-1',
             children: [{
-                    id: '2-1-1-1',
-                    label: 'page2-1-1-1'
+                    id: '3-1-1-1',
+                    label: 'page3-1-1-1'
                 },
                 {
-                    id: '2-1-1-2',
-                    label: 'page2-1-1-2'
+                    id: '3-1-1-2',
+                    label: 'page3-1-1-2'
                 },
             ]
         }]
     }]
-}, {
-    id: '1',
-    label: 'page1',
-    icon: 'el-icon-video-camera-solid',
 }]; // 导航数据
 
 http.createServer(function(request, response) {

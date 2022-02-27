@@ -1,9 +1,8 @@
 <template>
   <div class="ereryPage">
     <div class="pageHeader">
-      <span>page1,页面头部</span>
+      <span>页面头部</span>
       <el-button @click="toRoute">跳转子页面</el-button>
-       
     </div>
     <div class="pageContent">
       <router-view />
@@ -22,7 +21,7 @@ export default {
   methods: {
     toRoute() {
       this.$router.push({
-        name: this.page
+        name: this.page,
       });
       this.page = this.page === "1-1" ? "1-2" : "1-1";
     },
@@ -37,6 +36,7 @@ $pageHeaderHeight: 50px;
   height: 100%;
   overflow: hidden;
   display: grid;
+  width: 100%;
   grid-template-rows: $pageHeaderHeight calc(100% - #{$pageHeaderHeight});
 }
 .pageHeader {
@@ -44,6 +44,7 @@ $pageHeaderHeight: 50px;
 }
 .pageContent {
   height: 100%;
+  width: 100%;
   overflow-y: auto;
 }
 </style>

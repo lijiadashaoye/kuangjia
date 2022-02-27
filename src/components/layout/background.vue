@@ -151,71 +151,77 @@ export default {
          justify-content: space-between;
          margin-bottom: 10px;`;
 
-      for (let i = Math.floor(num / 100); i--; ) {
+      for (let i = Math.floor(num / 70); i--; ) {
         let span = document.createElement("span");
-        span.style = `width:${Math.floor(num / 8.8)}px;height:32px;${forSpan}}`;
+        span.style = `width:${Math.floor(num / 12)}px;height:28px;${forSpan}}`;
         li1.appendChild(span);
       }
-      for (let i = Math.floor(num / 90); i--; ) {
+      for (let i = Math.floor(num / 60); i--; ) {
         let span = document.createElement("span");
-        span.style = `width:${Math.floor(num / 10)}px;height:${Math.floor(
-          num / 10
+        span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
+          num / 15
         )}px;${forSpan}}`;
         li2.appendChild(span);
       }
-      for (let i = Math.floor(num / 96.4); i--; ) {
+      for (let i = Math.floor(num / 65); i--; ) {
         let span = document.createElement("span");
-        if (i === Math.floor(num / 96.4) - 1) {
-          span.style = `width:${Math.floor(num / 7.5)}px;height:${Math.floor(
-            num / 10
+        if (i === Math.floor(num / 65) - 1 || i === 0) {
+          span.style = `width:${Math.floor(num / 10)}px;height:${Math.floor(
+            num / 15
           )}px;${forSpan}}`;
         } else {
-          span.style = `width:${Math.floor(num / 10)}px;height:${Math.floor(
-            num / 10
+          span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
+            num / 15
           )}px;${forSpan}}`;
         }
         li3.appendChild(span);
       }
-      for (let i = Math.floor(num / 100); i--; ) {
+      for (let i = Math.floor(num / 70); i--; ) {
         let span = document.createElement("span");
-        if (i === Math.floor(num / 100) - 1 || i === 0) {
-          span.style =
-            "width:170px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0";
+        if (i === Math.floor(num / 70) - 1 || i === 0) {
+          span.style = `width:${Math.floor(num / 6.6)}px;height:${Math.floor(
+            num / 15
+          )}px;${forSpan}}`;
         } else {
-          span.style =
-            "width:80px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
+          span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
+            num / 15
+          )}px;${forSpan}}`;
         }
         li4.appendChild(span);
       }
-      for (let i = Math.floor(num / 110); i--; ) {
+      for (let i = Math.floor(num / 81); i--; ) {
         let span = document.createElement("span");
-        if (i === Math.floor(num / 110) - 1 || i === 0) {
-          span.style =
-            "width:215px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0";
+        if (i === Math.floor(num / 81) - 1 || i === 0) {
+          span.style = `width:${Math.floor(num / 5.5)}px;height:${Math.floor(
+            num / 15
+          )}px;${forSpan}}`;
         } else {
-          span.style =
-            "width:80px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
+          span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
+            num / 15
+          )}px;${forSpan}}`;
         }
         li5.appendChild(span);
       }
-      for (let i = Math.floor(num / 120); i--; ) {
+      for (let i = Math.floor(num / 82); i--; ) {
         let span = document.createElement("span");
-        if (i === Math.floor(num / 120) - 4) {
-          span.style =
-            "width:285px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0";
+        if (i === Math.floor(num / 82) - 4) {
+          span.style = `width:${Math.floor(num / 4)}px;height:${Math.floor(
+            num / 15
+          )}px;${forSpan}}`;
         } else if (i === 0) {
           let div = document.createElement("div"),
             p1 = document.createElement("p"),
             p2 = document.createElement("p");
 
-          div.style = "width:160px;flex-shrink:0";
-          p1.style = "text-align:center;";
-          p2.style = "text-align:center;";
+          div.style = "width:140px;flex-shrink:0";
+          p1.style =
+            "display:flex; justify-content:space-around;margin-bottom:6px;";
+          p2.style = "display:flex; justify-content:space-around";
 
           for (let i = 4; i--; ) {
             let span = document.createElement("span");
             span.style =
-              "width:40px;height:35px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
+              "width:40px;height:24px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
             if (i === 3) {
               p1.appendChild(span);
             } else {
@@ -226,8 +232,9 @@ export default {
           div.appendChild(p2);
           li6.appendChild(div);
         } else {
-          span.style =
-            "width:80px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
+          span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
+            num / 15
+          )}px;${forSpan}}`;
         }
         li6.appendChild(span);
       }
@@ -297,7 +304,7 @@ export default {
         four.appendChild(span);
       }
       // 画从左向右的文字条
-      let bottomNum = random(2, 15);
+      let bottomNum = random(20, 30);
       for (let i = this.systemData.featureList.length; i--; ) {
         let span = document.createElement("span");
         bottomNum += random(10, 20);
@@ -360,13 +367,16 @@ export default {
     right: 0;
     bottom: 20px;
   }
+  .three {
+    bottom: 0;
+  }
 
   .one {
     position: absolute;
     left: 0;
     bottom: 20px;
-    right: 37%;
-    top: 50%;
+    right: 38%;
+    top: 52%;
   }
   .two {
     z-index: 2;
