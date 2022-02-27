@@ -134,38 +134,45 @@ export default {
         li4 = document.createElement("li"),
         li5 = document.createElement("li"),
         li6 = document.createElement("li"),
-        one = document.createElement("div"),
         two = document.createElement("div"),
         four = document.createElement("div"),
-        five = document.createElement("div");
+        five = document.createElement("div"),
+        forSpan = `border-radius: 5px;
+        background: #d1d0d0;
+        display: inline-block;`;
 
-      li1.style = "display: flex;margin-bottom:10px;";
-      li2.style = "display: flex;margin-bottom:10px;";
-      li3.style = "display: flex;margin-bottom:10px;";
-      li4.style = "display: flex;margin-bottom:10px;";
-      li5.style = "display: flex;margin-bottom:10px;";
-      li6.style = "display: flex;margin-bottom:10px;";
+      li1.style =
+        li2.style =
+        li3.style =
+        li4.style =
+        li5.style =
+        li6.style =
+          `display: flex;
+         justify-content: space-between;
+         margin-bottom: 10px;`;
 
-      for (let i = Math.floor(num / 110); i--; ) {
+      for (let i = Math.floor(num / 100); i--; ) {
         let span = document.createElement("span");
-        span.style =
-          "width:110px;height:50px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
+        span.style = `width:${Math.floor(num / 8.8)}px;height:32px;${forSpan}}`;
         li1.appendChild(span);
-      }
-      for (let i = Math.floor(num / 80); i--; ) {
-        let span = document.createElement("span");
-        span.style =
-          "width:80px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
-        li2.appendChild(span);
       }
       for (let i = Math.floor(num / 90); i--; ) {
         let span = document.createElement("span");
-        if (i === Math.floor(num / 90) - 1) {
-          span.style =
-            "width:130px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0";
+        span.style = `width:${Math.floor(num / 10)}px;height:${Math.floor(
+          num / 10
+        )}px;${forSpan}}`;
+        li2.appendChild(span);
+      }
+      for (let i = Math.floor(num / 96.4); i--; ) {
+        let span = document.createElement("span");
+        if (i === Math.floor(num / 96.4) - 1) {
+          span.style = `width:${Math.floor(num / 7.5)}px;height:${Math.floor(
+            num / 10
+          )}px;${forSpan}}`;
         } else {
-          span.style =
-            "width:80px;height:80px;margin-right:10px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
+          span.style = `width:${Math.floor(num / 10)}px;height:${Math.floor(
+            num / 10
+          )}px;${forSpan}}`;
         }
         li3.appendChild(span);
       }
@@ -224,13 +231,6 @@ export default {
         }
         li6.appendChild(span);
       }
-      one.appendChild(li1);
-      one.appendChild(li2);
-      one.appendChild(li3);
-      one.appendChild(li4);
-      one.appendChild(li5);
-      one.appendChild(li6);
-
       // 上下交错恩渐变条
       let twoNum = Math.floor(this.$refs.two.offsetWidth / 5),
         left = 0;
@@ -269,7 +269,7 @@ export default {
       let twoNum2 = Math.floor(this.$refs.two.offsetWidth / 100),
         left2 = 0;
       for (let i = twoNum2; i--; ) {
-        let width = random(10, 20);
+        let width = random(5, 15);
         left2 += random(20, 250) + width;
         if (left2 > this.$refs.four.offsetWidth - 50) {
           break;
@@ -322,7 +322,12 @@ export default {
         five.appendChild(span);
       }
       setTimeout(() => {
-        this.$refs.one.appendChild(one);
+        this.$refs.one.appendChild(li1);
+        this.$refs.one.appendChild(li2);
+        this.$refs.one.appendChild(li3);
+        this.$refs.one.appendChild(li4);
+        this.$refs.one.appendChild(li5);
+        this.$refs.one.appendChild(li6);
         this.$refs.two.appendChild(two);
         this.$refs.four.appendChild(four);
         this.$refs.five.appendChild(five);
@@ -335,10 +340,10 @@ export default {
 <style scoped lang="scss">
 .backgroundAnimation {
   position: absolute;
-  top: 200px;
-  left: 134px;
-  right: 0px;
-  bottom: 30px;
+  left: 130px;
+  top: 0;
+  right: 0;
+  bottom: 0;
   overflow: hidden;
   -webkit-transform: translate3d(0, 0, 0);
   -moz-transform: translate3d(0, 0, 0);
@@ -346,28 +351,22 @@ export default {
   transform: translate3d(0, 0, 0);
   backface-visibility: hidden;
   perspective: 1000;
-  .two {
-    position: absolute;
-    left: 0;
-    top: 110px;
-    right: 0;
-    bottom: 0;
-  }
+  .two,
   .three,
   .four {
     position: absolute;
     left: 0;
-    top: -10%;
-    right: -20%;
-    bottom: 0;
+    top: 0;
+    right: 0;
+    bottom: 20px;
   }
 
   .one {
     position: absolute;
     left: 0;
-    bottom: 0;
-    right: 300px;
-    top: 20%;
+    bottom: 20px;
+    right: 37%;
+    top: 50%;
   }
   .two {
     z-index: 2;
@@ -377,9 +376,8 @@ export default {
     }
   }
   .three {
-    z-index: 4;
-    background: linear-gradient(#f6f8ff 10%, transparent 100%),
-      linear-gradient(30deg, transparent 30%, #f6f8ff 60%);
+    z-index: 6;
+    background: linear-gradient(to right, transparent 70%, #f6f8ff 85%);
   }
   .four {
     z-index: 3;
@@ -391,8 +389,8 @@ export default {
   .five {
     position: absolute;
     left: 0;
-    top: 20%;
-    bottom: 0;
+    top: 47%;
+    bottom: 20px;
     right: 0;
     z-index: 5;
     > div {
@@ -404,7 +402,7 @@ export default {
 .forLogo {
   position: absolute;
   top: 30px;
-  left: 134px;
+  left: 130px;
   z-index: 9;
   font-size: 60px;
   > img {
@@ -417,7 +415,7 @@ export default {
   display: inline-block;
   position: absolute;
   top: 180px;
-  left: 134px;
+  left: 130px;
   width: 447px;
   z-index: 6;
   background: linear-gradient(
