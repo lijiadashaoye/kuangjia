@@ -5,7 +5,9 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      radio: "",
+    };
   },
   created() {},
   methods: {},

@@ -1,11 +1,11 @@
 import Vue from 'vue'
-import App from './uitls/App.vue'
-import router from './uitls/router'
-import store from './uitls/store'
-import fromAxios from './uitls/axios'
-
+import App from './App.vue'
+import router from './router'
+import store from './store'
+import fromAxios from './axios'
+import './formateCss.scss';
+// 全部引入
 import ElementUI from 'element-ui';
-import './uitls/formateCss.scss'
 Vue.use(ElementUI);
 
 Vue.prototype.$bus = new Vue(); //  this.$bus.$emit("busEmit", "busEmit");

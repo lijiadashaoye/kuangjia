@@ -3,7 +3,6 @@
   <div>
     <div class="forLogo">
       <span>结合node的框架</span>
-      <img :src="require('@/assets/img/logo.png')" />
     </div>
     <!-- 软件特色介绍 -->
     <div
@@ -30,11 +29,10 @@
       </div>
     </div>
     <!-- 背景 -->
-    <div class="backgroundAnimation">
+    <div class="backgroundAnimation" v-if="!time">
       <div style="positon: relative; height: 100%">
-        <ul class="one" ref="one"></ul>
+        <div class="one"></div>
         <div class="two" ref="two"></div>
-        <div class="three"></div>
         <div class="four" ref="four"></div>
         <div class="five" ref="five"></div>
       </div>
@@ -64,6 +62,7 @@ export default {
   data() {
     return {
       systemData: null, // 有关软件的一些数据
+      time: null,
       dialog: {
         // 点击隐私政策的介绍弹框
         title: "",
@@ -75,6 +74,7 @@ export default {
   mounted() {
     this.aboutBackground();
   },
+
   methods: {
     showText(text) {
       this.dialog.title = text;
@@ -91,7 +91,7 @@ export default {
           yinsi: this.systemData.yinsi,
           versionData: this.systemData.versionData,
         });
-
+        this.makeBackground();
         this.$notify({
           duration: 3000,
           position: "top-right",
@@ -121,125 +121,16 @@ export default {
             ul.appendChild(li);
           }
         });
-        this.makeBackground();
       });
     },
     // 画背景图
     makeBackground() {
       // 画键盘
-      let num = this.$refs.one.offsetWidth,
-        li1 = document.createElement("li"),
-        li2 = document.createElement("li"),
-        li3 = document.createElement("li"),
-        li4 = document.createElement("li"),
-        li5 = document.createElement("li"),
-        li6 = document.createElement("li"),
-        two = document.createElement("div"),
+      let two = document.createElement("div"),
         four = document.createElement("div"),
         five = document.createElement("div"),
-        forSpan = `border-radius: 5px;
-        background: #d1d0d0;
-        display: inline-block;`;
-
-      li1.style =
-        li2.style =
-        li3.style =
-        li4.style =
-        li5.style =
-        li6.style =
-          `display: flex;
-         justify-content: space-between;
-         margin-bottom: 10px;`;
-
-      for (let i = Math.floor(num / 70); i--; ) {
-        let span = document.createElement("span");
-        span.style = `width:${Math.floor(num / 12)}px;height:28px;${forSpan}}`;
-        li1.appendChild(span);
-      }
-      for (let i = Math.floor(num / 60); i--; ) {
-        let span = document.createElement("span");
-        span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
-          num / 15
-        )}px;${forSpan}}`;
-        li2.appendChild(span);
-      }
-      for (let i = Math.floor(num / 65); i--; ) {
-        let span = document.createElement("span");
-        if (i === Math.floor(num / 65) - 1 || i === 0) {
-          span.style = `width:${Math.floor(num / 10)}px;height:${Math.floor(
-            num / 15
-          )}px;${forSpan}}`;
-        } else {
-          span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
-            num / 15
-          )}px;${forSpan}}`;
-        }
-        li3.appendChild(span);
-      }
-      for (let i = Math.floor(num / 70); i--; ) {
-        let span = document.createElement("span");
-        if (i === Math.floor(num / 70) - 1 || i === 0) {
-          span.style = `width:${Math.floor(num / 6.6)}px;height:${Math.floor(
-            num / 15
-          )}px;${forSpan}}`;
-        } else {
-          span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
-            num / 15
-          )}px;${forSpan}}`;
-        }
-        li4.appendChild(span);
-      }
-      for (let i = Math.floor(num / 81); i--; ) {
-        let span = document.createElement("span");
-        if (i === Math.floor(num / 81) - 1 || i === 0) {
-          span.style = `width:${Math.floor(num / 5.5)}px;height:${Math.floor(
-            num / 15
-          )}px;${forSpan}}`;
-        } else {
-          span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
-            num / 15
-          )}px;${forSpan}}`;
-        }
-        li5.appendChild(span);
-      }
-      for (let i = Math.floor(num / 82); i--; ) {
-        let span = document.createElement("span");
-        if (i === Math.floor(num / 82) - 4) {
-          span.style = `width:${Math.floor(num / 4)}px;height:${Math.floor(
-            num / 15
-          )}px;${forSpan}}`;
-        } else if (i === 0) {
-          let div = document.createElement("div"),
-            p1 = document.createElement("p"),
-            p2 = document.createElement("p");
-
-          div.style = "width:140px;flex-shrink:0";
-          p1.style =
-            "display:flex; justify-content:space-around;margin-bottom:6px;";
-          p2.style = "display:flex; justify-content:space-around";
-
-          for (let i = 4; i--; ) {
-            let span = document.createElement("span");
-            span.style =
-              "width:40px;height:24px;display:inline-block;border-radius: 5px;background:#d1d0d0 ";
-            if (i === 3) {
-              p1.appendChild(span);
-            } else {
-              p2.appendChild(span);
-            }
-          }
-          div.appendChild(p1);
-          div.appendChild(p2);
-          li6.appendChild(div);
-        } else {
-          span.style = `width:${Math.floor(num / 15)}px;height:${Math.floor(
-            num / 15
-          )}px;${forSpan}}`;
-        }
-        li6.appendChild(span);
-      }
-      // 上下交错恩渐变条
-      let twoNum = Math.floor(this.$refs.two.offsetWidth / 5),
+        // 上下交错恩渐变条
+        twoNum = Math.floor(this.$refs.two.offsetWidth / 5),
         left = 0;
       function random(min, max) {
         return min + Math.floor(Math.random() * (max - min + 1));
@@ -329,12 +220,6 @@ export default {
         five.appendChild(span);
       }
       setTimeout(() => {
-        this.$refs.one.appendChild(li1);
-        this.$refs.one.appendChild(li2);
-        this.$refs.one.appendChild(li3);
-        this.$refs.one.appendChild(li4);
-        this.$refs.one.appendChild(li5);
-        this.$refs.one.appendChild(li6);
         this.$refs.two.appendChild(two);
         this.$refs.four.appendChild(four);
         this.$refs.five.appendChild(five);
@@ -359,7 +244,6 @@ export default {
   backface-visibility: hidden;
   perspective: 1000;
   .two,
-  .three,
   .four {
     position: absolute;
     left: 0;
@@ -367,27 +251,23 @@ export default {
     right: 0;
     bottom: 20px;
   }
-  .three {
-    bottom: 0;
-  }
 
   .one {
     position: absolute;
-    left: 0;
-    bottom: 20px;
-    right: 38%;
-    top: 52%;
+    right: 0;
+    top: 15%;
+    left: 48%;
+    bottom: 0;
+    background: url("../../assets/img/logo.png") no-repeat;
+    background-size: 100% 100%;
   }
+
   .two {
     z-index: 2;
     > div {
       position: relative;
       height: 100%;
     }
-  }
-  .three {
-    z-index: 6;
-    background: linear-gradient(to right, transparent 70%, #f6f8ff 85%);
   }
   .four {
     z-index: 3;
@@ -415,16 +295,11 @@ export default {
   left: 130px;
   z-index: 9;
   font-size: 60px;
-  > img {
-    width: 300px;
-    vertical-align: text-top;
-    margin-left: 155px;
-  }
 }
 .mainInfoWap {
   display: inline-block;
   position: absolute;
-  top: 180px;
+  top: 120px;
   left: 130px;
   width: 447px;
   z-index: 6;

@@ -36,7 +36,7 @@ body {
         left: -20%;
     }
     to {
-        left: 85%;
+        left: 80%;
     }
 }
 
@@ -90,8 +90,8 @@ body {
 }
 
 // 修改element的默认样式
-$--color-primary: rgb(128,
-47,
-0);
+$--color-primary: rgb(3,
+186,
+199);
 $--font-path: '~element-ui/lib/theme-chalk/fonts';
 @import "~element-ui/packages/theme-chalk/src/index";

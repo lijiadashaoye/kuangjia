@@ -28,6 +28,25 @@
         <router-view></router-view>
       </div>
     </div>
+
+    <el-dialog
+      title="提示"
+      :close-on-click-modal="false"
+      :visible.sync="dialogVisible"
+      :show-close="false"
+      width="30%"
+    >
+      <span>是否清除当前登录用户的数据？</span>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="dialogVisible = false">取 消</el-button>
+        <el-button size="small" type="danger" @click="dialogFn(false)"
+          >清除数据</el-button
+        >
+        <el-button size="small" type="primary" @click="dialogFn(true)"
+          >保留数据</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 <script>
@@ -35,6 +54,7 @@ export default {
   data() {
     return {
       hasLogin: false, // 没有登录或者token过期的话不会显示页面内容
+      dialogVisible: false,
     };
   },
   computed: {
@@ -81,28 +101,24 @@ export default {
     // 右上角退出、修改密码
     toWhere(name) {
       if (name === "login" && this.$loStorage.get("userInfo")) {
-        this.$confirm("是否清除当前登录用户的数据？", "提示", {
-          confirmButtonText: "保留数据",
-          cancelButtonText: "清除数据",
-          closeOnClickModal: false,
-          showClose: false,
-        })
-          .then(() => {
-            this.$router.push({
-              name: name,
-            });
-          })
-          .catch(() => {
-            this.$loStorage.clear("userInfo");
-            this.$loStorage.clear("username");
-            this.$loStorage.clear("navCom");
-            this.$router.push({
-              name: name,
-            });
-          });
+        this.dialogVisible = true;
       } else {
         this.$router.push({
           name: name,
+        });
+      }
+    },
+    dialogFn(type) {
+      if (type) {
+        this.$router.push({
+          name: "login",
+        });
+      } else {
+        this.$loStorage.clear("userInfo");
+        this.$loStorage.clear("username");
+        this.$loStorage.clear("navCom");
+        this.$router.push({
+          name: "login",
         });
       }
     },

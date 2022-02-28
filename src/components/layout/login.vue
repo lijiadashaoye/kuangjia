@@ -219,8 +219,8 @@ export default {
 }
 .inputInfo {
   position: absolute;
-  top: 160px;
-  right: 120px;
+  bottom: 80px;
+  left: 200px;
   width: 300px;
   z-index: 10;
   background: #ffffff;
