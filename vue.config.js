@@ -42,39 +42,39 @@ fs.readdir(`${__dirname}/src/views`, async(err, dir) => {
     })
     // 自动写入 router.js 文件
 fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
-    // await new Promise(res => {
-    //     // 读取本地views文件夹，使用node执行网络请求
-    //     let req = http.request({
-    //         hostname: '127.0.0.1',
-    //         port: 8888,
-    //         path: '/upload',
-    //         method: 'POST',
-    //     })
-    //     req.write(JSON.stringify(dirs));
-    //     req.end();
-    //     res()
-    // })
+        // await new Promise(res => {
+        //     // 读取本地views文件夹，使用node执行网络请求
+        //     let req = http.request({
+        //         hostname: '127.0.0.1',
+        //         port: 8888,
+        //         path: '/upload',
+        //         method: 'POST',
+        //     })
+        //     req.write(JSON.stringify(dirs));
+        //     req.end();
+        //     res()
+        // })
 
-    // 读取每个页面的router.js文件
-    await new Promise(async res => {
-            let arr = [];
-            for (let j = 0; j < dirs.length; j++) {
-                await new Promise(resolve => {
-                    fs.readdir(`${__dirname}/src/views/${dirs[j]}`, 'utf8', (err, datas) => {
-                        for (let i = 0; i < datas.length; i++) {
-                            if (/router/ig.test(datas[i])) {
-                                arr.push(`require('@/views/${dirs[j]}/${datas[i]}').default`)
+        // 读取每个页面的router.js文件
+        await new Promise(async res => {
+                let arr = [];
+                for (let j = 0; j < dirs.length; j++) {
+                    await new Promise(resolve => {
+                        fs.readdir(`${__dirname}/src/views/${dirs[j]}`, 'utf8', (err, datas) => {
+                            for (let i = 0; i < datas.length; i++) {
+                                if (/router/ig.test(datas[i])) {
+                                    arr.push(`require('@/views/${dirs[j]}/${datas[i]}').default`)
+                                }
+
                             }
-
-                        }
-                        resolve(arr)
+                            resolve(arr)
+                        })
                     })
-                })
-            }
-            res(arr)
-        })
-        .then(re => {
-            let arr = [`import Vue from 'vue';import VueRouter from 'vue-router';import Login from '@/components/layout/login';
+                }
+                res(arr)
+            })
+            .then(re => {
+                let arr = [`import Vue from 'vue';import VueRouter from 'vue-router';import Login from '@/components/layout/login';
                             /*  在这个里写新增的全局必用组件  */
                         
                             `, `Vue.use(VueRouter);
@@ -92,28 +92,34 @@ fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
                                 name: 'content',
                                 path: '/content',
                                 component: () =>import('@/components/layout/content')/* 主要内容显示组件 */,children: [`,
-                `]}];\nconst router = new VueRouter({
+                    `]}];\nconst router = new VueRouter({
                                 mode: 'history',
                                 base: process.env.BASE_URL,
                                 routes
                              });
                         /* 重写路由push方法，防止点击同一个路由时报错 */const originalPush = VueRouter.prototype.push;\nVueRouter.prototype.push = function push(location, onResolve, onReject) {if (onResolve || onReject) {return originalPush.call(this, location, onResolve, onReject)} else {return originalPush.call(this, location).catch(err => err)}};\nexport default router`
-            ]
-            fs.unlink(routePath, (err) => {
-                let strs = `${arr[0]}${arr[1]}${re}${arr[2]}`
-                fs.writeFile('./src/uitls/router.js', strs, (err) => {
-                    console.log('router 写入成功')
+                ]
+                fs.unlink(routePath, (err) => {
+                    let strs = `${arr[0]}${arr[1]}${re}${arr[2]}`
+                    fs.writeFile('./src/uitls/router.js', strs, (err) => {
+                        console.log('router 写入成功')
+                    })
                 })
+
             })
+    })
+    /*
 
-        })
-})
+     将相关辅助函数进行替换成导入语句，从而减小 babel 编译出来的代码的文件大小: npm install babel-plugin-transform-runtime -D
 
+    */
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 let isProduction = process.env.NODE_ENV === 'production';
 
 // 全局变量
 // console.log(process.env.NB);
+
+console.log(isProduction);
 
 module.exports = {
     publicPath: isProduction ? './' : '/',
@@ -134,8 +140,12 @@ module.exports = {
         }
     },
     configureWebpack: config => {
-        config.entry.app = './src/uitls/main.js'
+        config.entry.app = './src/uitls/main.js';
         if (isProduction) {
+            // 使用CDN加载的，需要在 public/index.html文件内写上资源CDN地址
+            // config.externals = {
+            //     'vue': 'Vue'
+            // };
             // 开启分离js
             config.optimization = {
                 chunkIds: 'size',
@@ -144,11 +154,11 @@ module.exports = {
                     chunks: 'all', // 不管异步加载还是同步加载的模块都提取出来，打包到一个文件中。
                     maxAsyncRequests: Infinity, // 最大的按需(异步)加载次数，默认为 6。
                     maxInitialRequests: Infinity, // 打包后的入口文件加载时，还能同时加载js文件的数量（包括入口文件），默认为4。
-                    maxSize: 100000, // 把提取出来的模块打包生成的文件大小不能超过maxSize值，如果超过了，要对其进行分割并打包生成新的文件
+                    maxSize: 10000, // 把提取出来的模块打包生成的文件大小不能超过maxSize值，如果超过了，要对其进行分割并打包生成新的文件
                     cacheGroups: { // 配置提取模块的方案
                         // 其余选项和外面一致，若cacheGroups每项中有，就按配置的，没有就使用外面配置的。
                         vendor: {
-                            priority: 10, // 执行优先级，默认为0
+                            priority: 10, // 执行优先级，默认为0，数字越大表示优先级越高
                             test: /[\\/]node_modules[\\/]/,
                             reuseExistingChunk: true,
                             name(module) {
@@ -156,18 +166,11 @@ module.exports = {
                                 return `nb.${packageName}`
                             }
                         },
-                        default: {
-                            name: 'df',
-                            chunks: 'all',
-                            priority: 1,
-                            reuseExistingChunk: true
-                        },
                         styles: {
-                            name: 'styles',
                             test: /\.css$/,
-                            chunks: 'all',
                             enforce: true,
                             priority: 20,
+                            reuseExistingChunk: true
                         }
                     }
                 },
