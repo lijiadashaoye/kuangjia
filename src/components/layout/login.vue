@@ -4,7 +4,7 @@
     <BackGround @systemDataEmit="(t) => (systemData = t)" ref="backGround" />
     <!-- 登录表单区域 -->
     <div class="inputInfo">
-      <p class="inputInfo_title">欢迎登录代码工厂</p>
+      <p class="inputInfo_title">欢迎登录</p>
       <p v-if="systemData" class="inputInfo_subTitle">
         {{ systemData.versionData }}
       </p>
