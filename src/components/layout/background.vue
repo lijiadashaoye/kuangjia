@@ -258,7 +258,8 @@ export default {
     top: 15%;
     left: 48%;
     bottom: 0;
-    background: url("../../assets/img/logo.png") no-repeat;
+    // background: url("../../assets/img/logo.png") no-repeat;
+    background: url("../../assets/img/package.json.jpg") no-repeat;
     background-size: 100% 100%;
   }
 

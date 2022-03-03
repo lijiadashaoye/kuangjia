@@ -109,7 +109,6 @@ module.exports = {
         port: '5432',
         inline: true,
         compress: true,
-        hot: true,
         proxy: {
             '/client': {
                 target: 'http://localhost:8888/',
