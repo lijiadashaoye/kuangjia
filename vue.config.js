@@ -97,12 +97,25 @@ fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
     /*  项目优化  */
 
 const WebpackBar = require('webpackbar');
-// 全局变量
+// 使用 gzip ，只能用 1.1.12 版本
+const compressionWebpackPlugin = require('compression-webpack-plugin');
+const zopfli = require("@gfx/zopfli");
+const BrotliPlugin = require("brotli-webpack-plugin");
+const gZipRreg = new RegExp(`\\.(${['js', 'css', 'png', 'jpg', 'svg'].join('|')})$`);
+
+// Brotli是一种最初由 Google 开发的压缩算法，提供优于 gzip 的压缩。
+// Node 10.16.0 及更高版本在其 zlib 模块中原生支持Brotli 压缩。
+const zlib = require("zlib");
+
+// 全局变量 .env 文件里定义的
 // console.log(process.env.NB);
 // 环境判断
 // if (process.env.NODE_ENV === 'production') {}
+
 module.exports = {
-    publicPath: process.env.NODE_ENV === 'production' ? './' : '',
+    assetsDir: 'assets',
+    productionSourceMap: false,
+    publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
     productionSourceMap: false,
     devServer: {
         open: true,
@@ -126,11 +139,6 @@ module.exports = {
             chunkFilename: 'js/[name].js',
             crossOriginLoading: "anonymous",
         });
-        config.entry.app = './src/uitls/main.js';
-        // 使用CDN加载的，需要在 public/index.html文件内写上资源CDN地址
-        // config.externals = {
-        //     'vue': 'Vue'
-        // };
         // 开启分离js
         config.optimization = {
             chunkIds: 'natural',
@@ -160,13 +168,11 @@ module.exports = {
                 }
             }
         };
-        config.plugins = [...config.plugins,
-            new WebpackBar(),
-        ];
     },
     chainWebpack: config => {
-        //     // 多进程压缩js
-        config.plugin('uglifyjs-plugin').use('uglifyjs-webpack-plugin', [{
+        // 多进程压缩js
+        config.plugin('uglifyjs-plugin')
+            .use('uglifyjs-webpack-plugin', [{
                 uglifyOptions: {
                     cache: true,
                     parallel: true,
@@ -189,9 +195,60 @@ module.exports = {
             }])
             .end();
         // 修改title
-        config.plugin('html').tap(args => {
-            args[0].title = '结合node的框架'
-            return args
-        });
+        config.plugin('html')
+            .tap(args => {
+                args[0].title = '结合node的框架'
+                return args
+            });
+        // 使用进度条显示打包进度
+        config.plugin('webpackBar')
+            .use(new WebpackBar());
+        // 修改entry
+        config.entry('app')
+            .clear()
+            .add('./src/uitls/main.js');
+
+        // 方案一
+        // config.plugin('compressionPlugin')
+        //     .use(new compressionWebpackPlugin({
+        //         // 压缩算法函数。
+        //         algorithm(input, compressionOptions, callback) {
+        //             return zopfli.gzip(input, compressionOptions, callback);
+        //         },
+        //         filename: "[name].gz",
+        //         minRatio: 0.8, // 仅处理压缩比此比率更好的资产
+        //         test: gZipRreg,
+        //         deleteOriginalAssets: true // 是否删除原资源
+        //     }))
+        //     // Brotli 是由 Google 开发的无损压缩算法，可以在几乎相同的速度下比 gzip 得到更好的压缩效果，并且它已经被绝大多数现代浏览器所支持：
+        // config.plugin('brotliPlugin')
+        //     .use(new BrotliPlugin({
+        //         test: gZipRreg,
+        //         minRatio: 0.8
+        //     }))
+        // 方案二
+        // config.plugin('compressionPlugin')
+        //     .use(new compressionWebpackPlugin({
+        //         filename: '[name].gz',
+        //         algorithm: 'gzip',
+        //         test: gZipRreg,
+        //         minRatio: 0.8,
+        //         deleteOriginalAssets: true // 是否删除原资源
+        //     }));
+
+        // 方案三
+        // config.plugin('compressionPlugin')
+        //     .use(new compressionWebpackPlugin({
+        //         filename: "[name].br",
+        //         algorithm: "brotliCompress",
+        //         test: /\.(js|css|svg|png)$/,
+        //         compressionOptions: {
+        //             params: {
+        //                 [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+        //             },
+        //         },
+        //         minRatio: 0.8,
+        //         deleteOriginalAssets: true,
+        //     }));
     },
 }
