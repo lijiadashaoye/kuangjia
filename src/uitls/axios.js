@@ -3,8 +3,7 @@ import {
     Message
 } from "element-ui";
 // vue的http功能
-axios.defaults.baseURL = '';
-
+axios.defaults.baseURL = process.env.NODE_ENV === "development" ? '' : '';
 // 添加一个请求拦截器
 axios.interceptors.request.use(config => {
     let user = localStorage.getItem("userInfo");
@@ -28,7 +27,6 @@ axios.interceptors.response.use(response => {
         // 响应成功但数据有问题
         Message.error('响应成功但数据有问题')
     }
-
 }, error => {
     console.log(error)
         // 响应失败
