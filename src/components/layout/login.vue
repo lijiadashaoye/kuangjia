@@ -153,7 +153,7 @@ export default {
             };
             this.$axios({
               method: "post",
-              url: "/client/login",
+              url: "/login",
               data: params,
             }).then((res) => {
               if (res) {

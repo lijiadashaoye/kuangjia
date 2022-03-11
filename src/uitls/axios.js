@@ -85,7 +85,7 @@ let loStorage = {
 
 // 埋点函数
 function mesh(params) {
-    axios.post('/client/upload', params)
+    axios.post('/upload', params)
         .then(res => console.log(res))
 }
 

@@ -22,7 +22,7 @@
     <el-menu
       :default-active="$store.state.page"
       class="elMenu"
-      text-color="#8a8888"
+      text-color="#8a8886"
       active-text-color="#f58585"
       :collapse="!$store.state.showNav"
       @select="selectFn"

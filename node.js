@@ -41,7 +41,6 @@ let makeNav = [{
         }]
     }]
 }]; // 导航数据
-
 http.createServer(function(request, res) {
     res.writeHead(200, {
         "Content-Type": "application/json; charset=utf-8",
@@ -53,8 +52,8 @@ http.createServer(function(request, res) {
         url = request.url.split('/'),
         obj = null, // 返回给浏览器的数据
         data = []; // 接收post数据用
-
     if (!reg.test(url[1])) {
+
         switch (url[1]) {
             // 用来上传文件，但目前没用
             case 'upload':
@@ -160,10 +159,12 @@ http.createServer(function(request, res) {
                     }
                     readFileFn(readFile, header, res)
                 })
+
                 break;
         }
     }
-}).listen(8888);
+}).listen(7777);
+
 
 function readFileFn(readFile, header, res) {
     // fs.stat() 返回文件

@@ -1,5 +1,7 @@
 <template>
-  <router-view />
+  <div id="app">
+    <router-view />
+  </div>
 </template>
 <script>
 export default {
@@ -11,6 +13,7 @@ export default {
       provide2: "provide2",
     };
   },
+  mounted() {},
 };
 </script>
 

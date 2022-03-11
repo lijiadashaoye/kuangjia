@@ -84,7 +84,7 @@ export default {
     },
     // 页面背景相关
     aboutBackground() {
-      this.$axios.get("/client/system").then((res) => {
+      this.$axios.get("/system").then((res) => {
         this.systemData = res;
         this.$emit("systemDataEmit", {
           xieyi: this.systemData.xieyi,

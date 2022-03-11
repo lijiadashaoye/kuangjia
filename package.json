@@ -5,7 +5,7 @@
     "scripts": {
         "start": "vue-cli-service serve",
         "build": "vue-cli-service build",
-        "node": "concurrently \"npm start\" \"node node.js\""
+        "node": "concurrently \"node remake.js\" \"node node.js\" \"npm start\""
     },
     "dependencies": {
         "core-js": "^3.6.5",

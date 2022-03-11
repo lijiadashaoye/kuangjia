@@ -2,11 +2,20 @@ import Vue from 'vue';import VueRouter from 'vue-router';import Login from '@/co
                             /*  在这个里写新增的全局必用组件  */
                         
                             Vue.use(VueRouter);
-                            const routes = [{
-                                name: 'login',
-                                path: '/',
-                                component: Login /* 登录组件 */
-                             }, 
+                            const routes = [
+                                {
+                                    path: '*',
+                                    redirect: {name:'login'}
+                                },
+                                {
+                                    path: '/',
+                                    redirect: {name:'login'}
+                                },
+                                {
+                                    name: 'login',
+                                    path: '/login',
+                                    component: Login /* 登录组件 */
+                                },
                              {
                                 name: 'passAction',
                                 path: '/passAction',
