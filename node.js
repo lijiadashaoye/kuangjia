@@ -1,4 +1,7 @@
-var http = require("http");
+const http = require("http");
+const fs = require("fs");
+const path = require('path')
+
 let makeNav = [{
     id: '1',
     label: 'page1',
@@ -39,20 +42,20 @@ let makeNav = [{
     }]
 }]; // 导航数据
 
-http.createServer(function(request, response) {
-    response.writeHead(200, {
+http.createServer(function(request, res) {
+    res.writeHead(200, {
         "Content-Type": "application/json; charset=utf-8",
         'Access-Control-Allow-Origin': '*',
         'access-control-allow-methods': 'GET,HEAD,POST',
         'access-control-allow-credentials': true
     });
     let reg = /\.ico/,
-        url = request.url.slice(1),
+        url = request.url.split('/'),
         obj = null, // 返回给浏览器的数据
         data = []; // 接收post数据用
 
-    if (!reg.test(url)) {
-        switch (url) {
+    if (!reg.test(url[1])) {
+        switch (url[1]) {
             // 用来上传文件，但目前没用
             case 'upload':
                 request.on('data', c => {
@@ -60,7 +63,7 @@ http.createServer(function(request, response) {
                 })
                 request.on('end', () => {
                     let arr = JSON.parse(data.toString());
-                    response.end(JSON.stringify(arr));
+                    res.end(JSON.stringify(arr));
                 });
                 break;
             case 'system':
@@ -90,7 +93,7 @@ http.createServer(function(request, response) {
                         '用户服务协议2222222222222222',
                     ]
                 }
-                response.end(JSON.stringify(obj));
+                res.end(JSON.stringify(obj));
                 break;
             case 'login':
                 // 用户登录
@@ -103,9 +106,79 @@ http.createServer(function(request, response) {
                         token: 'token1111',
                         navList: makeNav
                     }
-                    response.end(JSON.stringify(obj));
+                    res.end(JSON.stringify(obj));
+                })
+                break;
+            case 'dist':
+                let filepath = path.join(__dirname, ...url); // 文件件路径+文件名
+                let baseName = path.extname(request.url); // 文件名拓展
+                // let dirPath = path.join(__dirname, url[1]); // 文件件路径
+                fs.access(filepath, (t) => {
+                    let readFile = '',
+                        header = {},
+                        reg1 = /.css$/ig,
+                        reg2 = /.js$/ig;
+
+                    if (!t) {
+                        // 不是压缩文件
+                        readFile = filepath;
+                        if (reg1.test(baseName)) {
+                            header = {
+                                'Content-Type': 'text/css;charset=utf-8',
+                            }
+                        } else
+                        if (reg2.test(baseName)) {
+                            header = {
+                                'Content-Type': 'application/javascript; charset=utf-8',
+
+                            }
+                        } else {
+                            header = {
+                                'Content-Type': 'text/html;charset=utf-8'
+                            }
+                        }
+                    } else {
+                        // 是压缩文件
+                        readFile = filepath + '.gz'
+
+                        if (reg1.test(baseName)) {
+                            header = {
+                                'Content-Type': 'text/css;charset=utf-8',
+                                'Content-Encoding': 'gzip, deflate, br'
+                            }
+                        } else
+                        if (reg2.test(baseName)) {
+                            header = {
+                                'Content-Type': 'application/javascript; charset=utf-8',
+                                'Content-Encoding': 'gzip, deflate, br'
+                            }
+                        } else {
+                            header = {
+                                'Content-Type': 'text/html;charset=utf-8'
+                            }
+                        }
+                    }
+                    readFileFn(readFile, header, res)
                 })
                 break;
         }
     }
 }).listen(8888);
+
+function readFileFn(readFile, header, res) {
+    // fs.stat() 返回文件
+    fs.stat(readFile, function(err, stats) {
+        if (err) {
+            res.writeHead(500, {
+                'Content-Type': 'text/plain'
+            });
+            res.end('500 啦');
+        } else {
+            if (stats.isFile()) {
+                var file = fs.createReadStream(readFile);
+                res.writeHead(200, header);
+                file.pipe(res);
+            }
+        }
+    });
+}

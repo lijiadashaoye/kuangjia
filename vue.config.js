@@ -110,7 +110,6 @@ const zlib = require("zlib");
 // 全局变量 .env 文件里定义的
 // console.log(process.env.NB);
 // 环境判断
-
 module.exports = {
     assetsDir: 'assets',
     productionSourceMap: false,
@@ -130,6 +129,10 @@ module.exports = {
                     '^/client': ''
                 }
             },
+            '/dist': {
+                target: 'http://localhost:8888/',
+                changeOrigin: true,
+            }
         }
     },
     configureWebpack: config => {
@@ -241,19 +244,19 @@ module.exports = {
             //     }));
 
             // 方案三
-            config.plugin('compressionPlugin')
-                .use(new compressionWebpackPlugin({
-                    filename: "[name].br",
-                    algorithm: "brotliCompress",
-                    test: /\.(js|css|svg|png)$/,
-                    compressionOptions: {
-                        params: {
-                            [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
-                        },
-                    },
-                    minRatio: 0.9,
-                    deleteOriginalAssets: true,
-                }));
+            // config.plugin('compressionPlugin')
+            //     .use(new compressionWebpackPlugin({
+            //         filename: "[name].br",
+            //         algorithm: "brotliCompress",
+            //         test: /\.(js|css|svg|png)$/,
+            //         compressionOptions: {
+            //             params: {
+            //                 [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
+            //             },
+            //         },
+            //         minRatio: 0.9,
+            //         deleteOriginalAssets: true,
+            //     }));
         }
     }
 }
