@@ -53,16 +53,12 @@ module.exports = {
                 maxAsyncRequests: Infinity, // 最大的按需(异步)加载次数，默认为 6。
                 maxInitialRequests: Infinity, // 打包后的入口文件加载时，还能同时加载js文件的数量（包括入口文件），默认为4。
                 maxSize: 100000, // 100k 把提取出来的模块打包生成的文件大小不能超过maxSize值，如果超过了，要对其进行分割并打包生成新的文件
-                name(module) {
-                    const packageName = (module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]).replace('@', '')
-                    return `nb.${packageName}`;
-                },
+                name: () => 'nb',
                 cacheGroups: { // 配置提取模块的方案
                     // 其余选项和外面一致，若cacheGroups每项中有，就按配置的，没有就使用外面配置的。
                     vendor: {
                         minChunks: 1,
                         priority: 2, // 执行优先级，默认为0，数字越大表示优先级越高
-                        test: /[\\/]node_modules[\\/]/,
                         reuseExistingChunk: true,
                     },
                     default: {
@@ -78,7 +74,7 @@ module.exports = {
     },
     chainWebpack: config => {
         // 移除prefetch插件，避免加载多余的资源
-        // config.plugins.delete('prefetch');
+        config.plugins.delete('prefetch');
         // 修改entry
         config.entry('app')
             .clear()
