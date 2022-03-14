@@ -1,8 +1,5 @@
 <template>
-  <div class="page">
-    page1
-    <img src="@/assets/img/tt.svg" />
-  </div>
+  <div class="page">page1</div>
 </template>
 
 <script>
@@ -19,6 +16,6 @@ export default {
 
 <style scoped lang='scss'>
 img {
-  width: 40px;
+  width: 100px;
 }
 </style>

@@ -51,7 +51,6 @@ fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
                             if (/router/ig.test(datas[i])) {
                                 arr.push(`require('@/views/${dirs[j]}/${datas[i]}').default`)
                             }
-
                         }
                         resolve(arr)
                     })
@@ -88,7 +87,7 @@ fs.readdir(`${__dirname}/src/views`, 'utf8', async(err, dirs) => {
                                 path: '/content',
                                 component: () =>import('@/components/layout/content')/* 主要内容显示组件 */,children: [`,
                 `]}];\nconst router = new VueRouter({
-                                mode: 'history',
+                                // mode: 'history',
                                 base: process.env.BASE_URL,
                                 routes
                              });

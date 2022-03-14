@@ -1,7 +1,17 @@
 const http = require("http");
 const fs = require("fs");
 const path = require('path')
-
+const fileType = {
+    'png': 'image/png',
+    "css": 'text/css',
+    "js": 'application/javascript',
+    "html": 'text/html',
+    "ico": 'image/x-icon',
+    'jpg': 'image/jpeg',
+    "svg": "image/svg+xml",
+    'woff': 'application/font-woff',
+    'ttf': 'application/x-font-ttf'
+}
 let makeNav = [{
     id: '1',
     label: 'page1',
@@ -48,138 +58,125 @@ http.createServer(function(request, res) {
         'access-control-allow-methods': 'GET,HEAD,POST',
         'access-control-allow-credentials': true
     });
-    let reg = /\.ico/,
-        url = request.url.split('/'),
+    let url = request.url.split('/'),
         obj = null, // 返回给浏览器的数据
-        data = []; // 接收post数据用
-    if (!reg.test(url[1])) {
-
-        switch (url[1]) {
-            // 用来上传文件，但目前没用
-            case 'upload':
-                request.on('data', c => {
-                    data.push(c)
-                })
-                request.on('end', () => {
-                    let arr = JSON.parse(data.toString());
-                    res.end(JSON.stringify(arr));
-                });
-                break;
-            case 'system':
-                obj = {
-                    versionData: "当前版本 Beta 0.6",
-                    mainInfoData: [{
-                            id: 1,
-                            text: "数据库设计工具、代码生成工具、文档生成工具、生成规则模板库",
-                        },
-                        {
-                            id: 2,
-                            text: "自定义模板扩展库管理、业务组件模板、项目管理、安全管理等",
-                        },
-                    ],
-                    featureList: ["提高编码质量", "解决重复编码工作", "提升开发效率"],
-                    tip: [
-                        "tip1 tip1 tip1 tip1 tip1 tip1 tip1 ",
-                        "新增某某某，某某某某",
-                        "修改某某某某某某某某某某某某，某某某某",
-                    ],
-                    yinsi: [
-                        "隐私政策11111111111111111",
-                        "隐私政策2222222222222222222222222",
-                    ],
-                    xieyi: [
-                        '用户服务协议11111111111',
-                        '用户服务协议2222222222222222',
-                    ]
-                }
-                res.end(JSON.stringify(obj));
-                break;
-            case 'login':
-                // 用户登录
-                request.on('data', c => {
-                    data.push(c)
-                })
-                request.on('end', () => {
+        data = [], // 接收post数据用
+        filepath = '', // 文件件路径+文件名
+        type = '',
+        baseName = path.extname(request.url); // 文件名拓展
+    switch (url[1]) {
+        case '':
+            filepath = path.join(__dirname, 'dist', 'index.html');
+            baseName = 'html';
+            readFileFn(filepath, baseName, res);
+            break;
+        case 'assets':
+            filepath = path.join(__dirname, 'dist', ...url);
+            type = url[url.length - 1].split('.');
+            baseName = type[type.length - 1];
+            readFileFn(filepath, baseName, res);
+            break;
+        case 'js':
+            filepath = path.join(__dirname, 'dist', ...url);
+            baseName = 'js';
+            readFileFn(filepath, baseName, res);
+            break;
+        case 'datas':
+            switch (url[2]) {
+                // 用来上传文件，但目前没用
+                case 'upload':
+                    request.on('data', c => {
+                        data.push(c)
+                    })
+                    request.on('end', () => {
+                        let arr = JSON.parse(data.toString());
+                        res.end(JSON.stringify(arr));
+                    });
+                    break;
+                case 'system':
                     obj = {
-                        ...JSON.parse(data.toString()),
-                        token: 'token1111',
-                        navList: makeNav
+                        versionData: "当前版本 Beta 0.6",
+                        mainInfoData: [{
+                                id: 1,
+                                text: "数据库设计工具、代码生成工具、文档生成工具、生成规则模板库",
+                            },
+                            {
+                                id: 2,
+                                text: "自定义模板扩展库管理、业务组件模板、项目管理、安全管理等",
+                            },
+                        ],
+                        featureList: ["提高编码质量", "解决重复编码工作", "提升开发效率"],
+                        tip: [
+                            "tip1 tip1 tip1 tip1 tip1 tip1 tip1 ",
+                            "新增某某某，某某某某",
+                            "修改某某某某某某某某某某某某，某某某某",
+                        ],
+                        yinsi: [
+                            "隐私政策11111111111111111",
+                            "隐私政策2222222222222222222222222",
+                        ],
+                        xieyi: [
+                            '用户服务协议11111111111',
+                            '用户服务协议2222222222222222',
+                        ]
                     }
                     res.end(JSON.stringify(obj));
-                })
-                break;
-            case 'dist':
-                let filepath = path.join(__dirname, ...url); // 文件件路径+文件名
-                let baseName = path.extname(request.url); // 文件名拓展
-                // let dirPath = path.join(__dirname, url[1]); // 文件件路径
-                fs.access(filepath, (t) => {
-                    let readFile = '',
-                        header = {},
-                        reg1 = /.css$/ig,
-                        reg2 = /.js$/ig;
-
-                    if (!t) {
-                        // 不是压缩文件
-                        readFile = filepath;
-                        if (reg1.test(baseName)) {
-                            header = {
-                                'Content-Type': 'text/css;charset=utf-8',
-                            }
-                        } else
-                        if (reg2.test(baseName)) {
-                            header = {
-                                'Content-Type': 'application/javascript; charset=utf-8',
-
-                            }
-                        } else {
-                            header = {
-                                'Content-Type': 'text/html;charset=utf-8'
-                            }
+                    break;
+                case 'login':
+                    // 用户登录
+                    request.on('data', c => {
+                        data.push(c)
+                    })
+                    request.on('end', () => {
+                        obj = {
+                            ...JSON.parse(data.toString()),
+                            token: 'token1111',
+                            navList: makeNav
                         }
-                    } else {
-                        // 是压缩文件
-                        readFile = filepath + '.gz'
-
-                        if (reg1.test(baseName)) {
-                            header = {
-                                'Content-Type': 'text/css;charset=utf-8',
-                                'Content-Encoding': 'gzip, deflate, br'
-                            }
-                        } else
-                        if (reg2.test(baseName)) {
-                            header = {
-                                'Content-Type': 'application/javascript; charset=utf-8',
-                                'Content-Encoding': 'gzip, deflate, br'
-                            }
-                        } else {
-                            header = {
-                                'Content-Type': 'text/html;charset=utf-8'
-                            }
-                        }
-                    }
-                    readFileFn(readFile, header, res)
-                })
-
-                break;
-        }
+                        res.end(JSON.stringify(obj));
+                    })
+                    break;
+            }
+            break;
+        default:
+            filepath = path.join(__dirname, 'dist', url[url.length - 1]);
+            baseName = 'ico';
+            readFileFn(filepath, baseName, res);
+            break;
     }
 }).listen(7777);
 
-
-function readFileFn(readFile, header, res) {
-    // fs.stat() 返回文件
-    fs.stat(readFile, function(err, stats) {
-        if (err) {
-            res.writeHead(500, {
-                'Content-Type': 'text/plain'
-            });
-            res.end('500 啦');
+function readFileFn(readFile, baseName, res) {
+    let header = {}
+    fs.access(readFile, (t) => {
+        if (!t) {
+            // 不是压缩文件
+            header = {
+                'Content-Type': `${fileType[baseName]}`,
+            }
         } else {
-            if (stats.isFile()) {
-                var file = fs.createReadStream(readFile);
-                res.writeHead(200, header);
-                file.pipe(res);
+            // 是压缩文件
+            readFile += '.gz'
+            header = {
+                'Content-Type': `${fileType[baseName]}`,
+                'Content-Encoding': 'gzip, deflate, br'
             }
         }
-    });
+        // fs.stat() 返回文件
+        fs.stat(readFile, function(err, stats) {
+            if (err) {
+                res.writeHead(500, {
+                    'Content-Type': 'text/plain'
+                });
+                res.end('500 啦');
+            } else {
+                if (stats.isFile()) {
+                    var file = fs.createReadStream(readFile);
+                    res.writeHead(200, header);
+                    file.pipe(res);
+                }
+            }
+        });
+
+    })
 }

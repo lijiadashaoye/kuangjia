@@ -26,7 +26,7 @@ import Vue from 'vue';import VueRouter from 'vue-router';import Login from '@/co
                                 path: '/content',
                                 component: () =>import('@/components/layout/content')/* 主要内容显示组件 */,children: [require('@/views/page1/router.js').default]}];
 const router = new VueRouter({
-                                mode: 'history',
+                                // mode: 'history',
                                 base: process.env.BASE_URL,
                                 routes
                              });

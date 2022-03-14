@@ -1,4 +1,6 @@
-/*  项目优化  */
+// 引入自动构建router和store的文件
+require('./remake')
+    /*  项目优化  */
 const WebpackBar = require('webpackbar');
 // 使用 gzip ，只能用 1.1.12 版本
 const compressionWebpackPlugin = require('compression-webpack-plugin');
@@ -24,19 +26,14 @@ module.exports = {
         compress: true,
         progress: false,
         proxy: {
-            // 获取数据的代理
-            '/': {
+            // 获取数据的代理，跨域用
+            '/datas': {
                 target: 'http://localhost:7777/',
                 changeOrigin: true,
-                // pathRewrite: {
-                //     // 忽略特定的 url 字符串
-                //     '^': ''
-                // }
-            },
-            // 查看打包文件的代理
-            '/dist': {
-                target: 'http://localhost:7777/',
-                changeOrigin: true,
+                pathRewrite: {
+                    // 忽略特定的 url 字符串
+                    '^/datas': '/datas'
+                }
             }
         }
     },
@@ -55,7 +52,7 @@ module.exports = {
                 chunks: 'all', // 不管异步加载还是同步加载的模块都提取出来，打包到一个文件中。
                 maxAsyncRequests: Infinity, // 最大的按需(异步)加载次数，默认为 6。
                 maxInitialRequests: Infinity, // 打包后的入口文件加载时，还能同时加载js文件的数量（包括入口文件），默认为4。
-                maxSize: 200000, // 把提取出来的模块打包生成的文件大小不能超过maxSize值，如果超过了，要对其进行分割并打包生成新的文件
+                maxSize: 100000, // 100k 把提取出来的模块打包生成的文件大小不能超过maxSize值，如果超过了，要对其进行分割并打包生成新的文件
                 name(module) {
                     const packageName = (module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1]).replace('@', '')
                     return `nb.${packageName}`;
@@ -81,7 +78,7 @@ module.exports = {
     },
     chainWebpack: config => {
         // 移除prefetch插件，避免加载多余的资源
-        config.plugins.delete('prefetch');
+        // config.plugins.delete('prefetch');
         // 修改entry
         config.entry('app')
             .clear()

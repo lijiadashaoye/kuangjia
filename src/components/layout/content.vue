@@ -1,7 +1,7 @@
 <template>
   <div class="wap" v-if="hasLogin">
     <div class="title">
-      <img :src="require('@/assets/img/logo.png')" />
+      <img src="@/assets/img/tt.svg" />
       <div class="titlt_right">
         <i class="el-icon-question questionIcon" title="常见问题解答"></i>
 
