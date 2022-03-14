@@ -2,15 +2,9 @@
 require('./remake')
     /*  项目优化  */
 const WebpackBar = require('webpackbar');
-// 使用 gzip ，只能用 1.1.12 版本
-const compressionWebpackPlugin = require('compression-webpack-plugin');
 const zopfli = require("@gfx/zopfli");
 const BrotliPlugin = require("brotli-webpack-plugin");
 const gZipRreg = new RegExp(`\\.(${['js', 'css', 'png', 'jpg', 'svg'].join('|')})$`);
-
-// Brotli是一种最初由 Google 开发的压缩算法，提供优于 gzip 的压缩。
-// Node 10.16.0 及更高版本在其 zlib 模块中原生支持Brotli 压缩。
-const zlib = require("zlib");
 
 // 全局变量 .env 文件里定义的
 // console.log(process.env.NB);
@@ -105,7 +99,7 @@ module.exports = {
                             // 删除所有的 `console` 语句，可以兼容ie浏览器
                             drop_console: true,
                             // 内嵌定义了但是只用到一次的变量
-                            collapse_vars: true,
+                            collapse_vars: false,
                             // 提取出出现多次但是没有定义成变量去引用的静态值
                             reduce_vars: true,
                             pure_funcs: ['console.log']
@@ -113,48 +107,17 @@ module.exports = {
                     }
                 }])
                 .end();
-            // 方案一
-            // config.plugin('compressionPlugin')
-            //     .use(new compressionWebpackPlugin({
-            //         // 压缩算法函数。
-            //         algorithm(input, compressionOptions, callback) {
-            //             return zopfli.gzip(input, compressionOptions, callback);
-            //         },
-            //         filename: "[name].gz",
-            //         minRatio: 0.8, // 仅处理压缩比此比率更好的资产
-            //         test: gZipRreg,
-            //         deleteOriginalAssets: true // 是否删除原资源
-            //     }))
-            //     // Brotli 是由 Google 开发的无损压缩算法，可以在几乎相同的速度下比 gzip 得到更好的压缩效果，并且它已经被绝大多数现代浏览器所支持：
-            // config.plugin('brotliPlugin')
-            //     .use(new BrotliPlugin({
-            //         test: gZipRreg,
-            //         minRatio: 0.8
-            //     }))
-            // 方案二
-            // config.plugin('compressionPlugin')
-            //     .use(new compressionWebpackPlugin({
-            //         filename: '[name].gz',
-            //         algorithm: 'gzip',
-            //         test: gZipRreg,
-            //         minRatio: 0.9,
-            //         deleteOriginalAssets: true // 是否删除原资源
-            //     }));
-
-            // 方案三
-            // config.plugin('compressionPlugin')
-            //     .use(new compressionWebpackPlugin({
-            //         filename: "[name].br",
-            //         algorithm: "brotliCompress",
-            //         test: /\.(js|css|svg|png)$/,
-            //         compressionOptions: {
-            //             params: {
-            //                 [zlib.constants.BROTLI_PARAM_QUALITY]: 11,
-            //             },
-            //         },
-            //         minRatio: 0.9,
-            //         deleteOriginalAssets: true,
-            //     }));
+            // Brotli 是由 Google 开发的无损压缩算法，可以在几乎相同的速度下比 gzip 得到更好的压缩效果，并且它已经被绝大多数现代浏览器所支持：
+            config.plugin('brotliPlugin')
+                .use(new BrotliPlugin({
+                    // 压缩算法函数。
+                    algorithm(input, compressionOptions, callback) {
+                        return zopfli.gzip(input, compressionOptions, callback);
+                    },
+                    minRatio: 0.8, // 仅处理压缩比此比率更高的资产
+                    test: gZipRreg,
+                    deleteOriginalAssets: true // 是否删除原资源
+                }));
         }
     }
 }

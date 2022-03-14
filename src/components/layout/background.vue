@@ -282,7 +282,7 @@ export default {
     left: 0;
     top: 47%;
     bottom: 20px;
-    right: 0;
+    right: -50%;
     z-index: 5;
     > div {
       position: relative;

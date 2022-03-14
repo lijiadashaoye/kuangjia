@@ -51,19 +51,18 @@ let makeNav = [{
         }]
     }]
 }]; // 导航数据
-http.createServer(function(request, res) {
+http.createServer(function(req, res) {
     res.writeHead(200, {
-        "Content-Type": "application/json; charset=utf-8",
         'Access-Control-Allow-Origin': '*',
         'access-control-allow-methods': 'GET,HEAD,POST',
         'access-control-allow-credentials': true
     });
-    let url = request.url.split('/'),
+    let url = req.url.split('/'),
         obj = null, // 返回给浏览器的数据
         data = [], // 接收post数据用
         filepath = '', // 文件件路径+文件名
         type = '',
-        baseName = path.extname(request.url); // 文件名拓展
+        baseName = path.extname(req.url); // 文件名拓展
     switch (url[1]) {
         case '':
             filepath = path.join(__dirname, 'dist', 'index.html');
@@ -85,10 +84,10 @@ http.createServer(function(request, res) {
             switch (url[2]) {
                 // 用来上传文件，但目前没用
                 case 'upload':
-                    request.on('data', c => {
+                    req.on('data', c => {
                         data.push(c)
                     })
-                    request.on('end', () => {
+                    req.on('end', () => {
                         let arr = JSON.parse(data.toString());
                         res.end(JSON.stringify(arr));
                     });
@@ -124,10 +123,10 @@ http.createServer(function(request, res) {
                     break;
                 case 'login':
                     // 用户登录
-                    request.on('data', c => {
+                    req.on('data', c => {
                         data.push(c)
                     })
-                    request.on('end', () => {
+                    req.on('end', () => {
                         obj = {
                             ...JSON.parse(data.toString()),
                             token: 'token1111',
@@ -154,29 +153,46 @@ function readFileFn(readFile, baseName, res) {
             header = {
                 'Content-Type': `${fileType[baseName]}`,
             }
+            backFile(readFile, header, res)
         } else {
-            // 是压缩文件
-            readFile += '.gz'
-            header = {
-                'Content-Type': `${fileType[baseName]}`,
-                'Content-Encoding': 'gzip, deflate, br'
+            fs.access(readFile + '.gz', (s) => {
+                if (!s) {
+                    // 是 gzip 文件
+                    readFile += '.gz'
+                    header = {
+                        'Content-Type': `${fileType[baseName]}`,
+                        'Content-Encoding': 'gzip',
+                        'Accept-Encoding': 'gzip,br',
+                    }
+                } else {
+                    // 是压缩文件
+                    readFile += '.br'
+                    header = {
+                        'Content-Type': `${fileType[baseName]}`,
+                        'Content-Encoding': 'br',
+                        'Accept-Encoding': 'gzip,br',
+                    }
+                }
+                backFile(readFile, header, res)
+            })
+        }
+    })
+}
+
+function backFile(readFile, header, res) {
+    // fs.stat() 返回文件
+    fs.stat(readFile, function(err, stats) {
+        if (err) {
+            res.writeHead(500, {
+                'Content-Type': 'text/plain;charset=utf-8'
+            });
+            res.end('500 啦');
+        } else {
+            if (stats.isFile()) {
+                var file = fs.createReadStream(readFile);
+                res.writeHead(200, header);
+                file.pipe(res);
             }
         }
-        // fs.stat() 返回文件
-        fs.stat(readFile, function(err, stats) {
-            if (err) {
-                res.writeHead(500, {
-                    'Content-Type': 'text/plain'
-                });
-                res.end('500 啦');
-            } else {
-                if (stats.isFile()) {
-                    var file = fs.createReadStream(readFile);
-                    res.writeHead(200, header);
-                    file.pipe(res);
-                }
-            }
-        });
-
-    })
+    });
 }
