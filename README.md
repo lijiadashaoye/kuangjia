@@ -53,3 +53,6 @@ project
 --------------|--store.js   // 当前导航的独立store配置，到时候自动以文件夹名字进行命名空间调用，如this.$store.state.page1.page1State      
 -----------|--main.js         
 -----------|--test.xlsx  //      @/views/page1/pages/page1.vue 页面里的读取excel示例
+
+### 笔记 1
+1：配置gitlab镜像github：https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token<br>
