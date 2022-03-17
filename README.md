@@ -55,5 +55,5 @@ project
 -----------|--test.xlsx  //      @/views/page1/pages/page1.vue 页面里的读取excel示例
 
 ### 笔记 
-异常解决——GitLab ： ssh: connect to host port 22: Connection refused:
+异常解决——GitLab ： ssh: connect to host port 22: Connection refused:<br>
 https://cloud.tencent.com/developer/article/1764727
