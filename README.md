@@ -54,5 +54,4 @@ project
 -----------|--main.js         
 -----------|--test.xlsx  //      @/views/page1/pages/page1.vue 页面里的读取excel示例
 
-### 笔记 1
-1：配置gitlab镜像github：https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/creating-a-personal-access-token<br>
+### 笔记 
