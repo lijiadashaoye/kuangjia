@@ -4,34 +4,40 @@
     <div class="forLogo">
       <span>结合node的框架</span>
     </div>
-    <!-- 软件特色介绍 -->
-    <div
-      v-if="systemData"
-      class="mainInfoWap"
-      :style="{ height: `${systemData.mainInfoData.length * 33 + 120}px` }"
-    >
-      <div
-        class="mainInfo"
-        :style="{ height: `${systemData.mainInfoData.length * 33 + 110}px` }"
-      >
-        <div
-          class="mainInfoList"
-          :style="{ height: `${systemData.mainInfoData.length * 33 + 110}px` }"
-        >
-          <p class="infoTitle">代码工厂总体功能建主要涵盖：</p>
+    <div v-if="systemData" class="mainInfoWap">
+      <div class="mainInfo">
+        <div class="mainInfoList">
+          <p class="infoTitle">
+            {{ systemData.mainInfoData.title }}
+          </p>
+          <div>
+            <ul
+              v-show="showTar == i"
+              v-for="(t, i) of systemData.mainInfoData.list"
+              :key="i"
+            >
+              <li v-for="s of t" :key="s.id">
+                <i class="el-icon-check"></i>
+                <span>{{ s.text }}</span>
+              </li>
+            </ul>
+          </div>
           <ul>
-            <li v-for="t of systemData.mainInfoData" :key="t.id">
-              <i class="el-icon-check"></i>
-              <span>{{ t.text }}</span>
-            </li>
+            <li
+              @mouseenter="showTar = i"
+              :class="{ isShow: showTar == i }"
+              v-for="(r, i) of systemData.mainInfoData.list.length"
+              :key="r"
+            ></li>
           </ul>
         </div>
       </div>
     </div>
-    <!-- 背景 -->
     <div class="backgroundAnimation" v-if="!time">
       <div style="positon: relative; height: 100%">
-        <div class="one"></div>
+        <div class="one">
+          <p>package.json 配置项</p>
+        </div>
         <div class="two" ref="two"></div>
         <div class="four" ref="four"></div>
         <div class="five" ref="five"></div>
@@ -69,12 +75,24 @@ export default {
         visible: false,
         content: "",
       },
+      showTar: 0,
+      loopTime: null,
     };
   },
   mounted() {
     this.aboutBackground();
+    this.loopTime = setInterval(() => {
+      if (this.showTar + 1 == this.systemData.mainInfoData.list.length) {
+        this.showTar = 0;
+      } else {
+        ++this.showTar;
+      }
+    }, 5000);
   },
-
+  beforeDestroy() {
+    clearInterval(this.loopTime);
+    this.loopTime = null;
+  },
   methods: {
     showText(text) {
       this.dialog.title = text;
@@ -84,7 +102,7 @@ export default {
     },
     // 页面背景相关
     aboutBackground() {
-      this.$axios.get("/datas/system").then((res) => {
+      this.$axios.get(this.$url.system).then((res) => {
         this.systemData = res;
         this.$emit("systemDataEmit", {
           xieyi: this.systemData.xieyi,
@@ -258,9 +276,13 @@ export default {
     top: 15%;
     left: 48%;
     bottom: 0;
-    // background: url("../../assets/img/logo.png") no-repeat;
     background: url("../../assets/img/package.json.jpg") no-repeat;
     background-size: 100% 100%;
+    > p {
+      text-indent: 90px;
+      font-size: 18px;
+      color: white;
+    }
   }
 
   .two {
@@ -303,6 +325,7 @@ export default {
   top: 120px;
   left: 130px;
   width: 447px;
+  height: 200px;
   z-index: 6;
   background: linear-gradient(
     165deg,
@@ -318,6 +341,7 @@ export default {
     top: 27px;
     left: 33px;
     width: 552px;
+    height: 160px;
     background: linear-gradient(
       180deg,
       rgba(255, 255, 255, 0.51) 0%,
@@ -331,7 +355,7 @@ export default {
       top: 7px;
       left: 6px;
       width: 552px;
-      min-height: 160px;
+      height: 175px;
       background: linear-gradient(
         180deg,
         rgba(255, 255, 255, 0.51) 0%,
@@ -340,20 +364,50 @@ export default {
       border-radius: 37px;
       border: 1px solid #ffffff;
       .infoTitle {
-        padding: 30px 5px 5px 47px;
+        padding: 18px 5px 5px 49px;
         font-size: 24px;
         font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
         font-weight: bold;
         color: #007bff;
         line-height: 31px;
-        margin-bottom: 12px;
       }
-      li {
-        font-size: 16px;
-        font-family: AppleColorEmoji;
-        color: #101821;
-        line-height: 30px;
-        padding: 3px 0 0 47px;
+      > div {
+        position: relative;
+        height: 114px;
+        width: 100%;
+
+        ul {
+          height: 100%;
+          width: 100%;
+          position: absolute;
+          li {
+            font-size: 16px;
+            font-family: AppleColorEmoji;
+            color: #101821;
+            line-height: 30px;
+            padding: 3px 0 0 47px;
+          }
+        }
+      }
+      > ul {
+        display: flex;
+        justify-content: center;
+        width: 100%;
+        height: 10px;
+        > li {
+          width: 20px;
+          height: 6px;
+          margin: 0 5px;
+          background: rgb(0, 136, 255);
+          cursor: pointer;
+          opacity: 0.3;
+          &:hover {
+            opacity: 1;
+          }
+        }
+        .isShow {
+          opacity: 1;
+        }
       }
     }
   }

@@ -1,6 +1,6 @@
 // 引入自动构建router和store的文件
 require('./remake')
-    /*  项目优化  */
+/*  项目优化  */
 const WebpackBar = require('webpackbar');
 const zopfli = require("@gfx/zopfli");
 const BrotliPlugin = require("brotli-webpack-plugin");
@@ -16,9 +16,6 @@ module.exports = {
     devServer: {
         open: true,
         port: '5432',
-        inline: true,
-        compress: true,
-        progress: false,
         proxy: {
             // 获取数据的代理，跨域用
             '/datas': {

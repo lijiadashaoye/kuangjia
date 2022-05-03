@@ -100,7 +100,7 @@ export default {
     // mousemove:鼠标在某元素上移动时触发，即使在其子元素上也会触发。触发的频率很高
     // 右上角退出、修改密码
     toWhere(name) {
-      if (name === "login" && this.$loStorage.get("userInfo")) {
+      if (name === "login" && this.$seStorage.get("userInfo")) {
         this.dialogVisible = true;
       } else {
         this.$router.push({
@@ -109,18 +109,12 @@ export default {
       }
     },
     dialogFn(type) {
-      if (type) {
-        this.$router.push({
-          name: "login",
-        });
-      } else {
-        this.$loStorage.clear("userInfo");
-        this.$loStorage.clear("username");
-        this.$loStorage.clear("navCom");
-        this.$router.push({
-          name: "login",
-        });
+      if (!type) {
+        this.$seStorage.clear("userInfo");
       }
+      this.$router.push({
+        name: "login",
+      });
     },
   },
 };

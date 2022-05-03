@@ -13,11 +13,11 @@ const fileType = {
     'ttf': 'application/x-font-ttf'
 }
 let makeNav = [{
-    id: '1',
+    id: 'page1',
     label: 'page1',
     icon: 'el-icon-video-camera-solid',
 }, {
-    id: '2',
+    id: 'page2',
     label: 'page2',
     icon: 'el-icon-location',
     children: [{
@@ -51,7 +51,7 @@ let makeNav = [{
         }]
     }]
 }]; // 导航数据
-http.createServer(function(req, res) {
+http.createServer(function (req, res) {
     res.writeHead(200, {
         'Access-Control-Allow-Origin': '*',
         'access-control-allow-methods': 'GET,HEAD,POST',
@@ -95,15 +95,50 @@ http.createServer(function(req, res) {
                 case 'system':
                     obj = {
                         versionData: "当前版本 Beta 0.6",
-                        mainInfoData: [{
-                                id: 1,
-                                text: "数据库设计工具、代码生成工具、文档生成工具、生成规则模板库",
-                            },
-                            {
-                                id: 2,
-                                text: "自定义模板扩展库管理、业务组件模板、项目管理、安全管理等",
-                            },
-                        ],
+                        mainInfoData: {
+                            title: '功能简介',
+                            list: [
+                                [{
+                                        id: 1,
+                                        text: "数据库设计工具、代码生成工具、文档生成工具、生成规则模板库",
+                                    },
+                                    {
+                                        id: 2,
+                                        text: "自定义模板扩展库管理、业务组件模板、项目管理、安全管理等",
+                                    },
+                                    {
+                                        id: 3,
+                                        text: "伺服电缸山东分公司的复古风格你吃不吃VB",
+                                    }
+                                ],
+                                [{
+                                        id: 3,
+                                        text: "agsdfgdgdfgsdf",
+                                    },
+                                    {
+                                        id: 4,
+                                        text: "sef5tyw54hrdfghghjgfh",
+                                    },
+                                    {
+                                        id: 5,
+                                        text: "公司垫付你的风格女车陂南地铁供热管二",
+                                    },
+                                ],
+                                [{
+                                        id: 6,
+                                        text: "hfghl/.k,jhngbvefwdwerthdgch",
+                                    },
+                                    {
+                                        id: 7,
+                                        text: "数据大馒头也是WEZDGXFHTGR",
+                                    },
+                                    {
+                                        id: 8,
+                                        text: "342qwe67t8oyihlkgjhmgnfbdcs",
+                                    },
+                                ],
+                            ]
+                        },
                         featureList: ["提高编码质量", "解决重复编码工作", "提升开发效率"],
                         tip: [
                             "tip1 tip1 tip1 tip1 tip1 tip1 tip1 ",
@@ -181,7 +216,7 @@ function readFileFn(readFile, baseName, res) {
 
 function backFile(readFile, header, res) {
     // fs.stat() 返回文件
-    fs.stat(readFile, function(err, stats) {
+    fs.stat(readFile, function (err, stats) {
         if (err) {
             res.writeHead(500, {
                 'Content-Type': 'text/plain;charset=utf-8'

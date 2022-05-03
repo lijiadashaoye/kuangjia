@@ -8,7 +8,7 @@
   >
     <div class="changeNavShow">
       <div v-show="$store.state.showNav">
-        <span @click="toMainPage">代码工厂框架</span>
+        <span @click="toMainPage">框架</span>
       </div>
       <div
         @click="$store.commit('showNavFn')"
@@ -37,6 +37,7 @@ export default {
   components: { Submenu: () => import("./submenu") },
   computed: {
     navList() {
+      this.$store.commit("chagePage", this.$seStorage.get("navList")[0].id);
       return this.$seStorage.get("navList");
     },
   },
@@ -65,7 +66,6 @@ export default {
 };
 </script>
 <style lang="scss" scoped>
-
 // 使用用scss变量
 $height: 50px;
 .navWap {

@@ -18,6 +18,7 @@
         label: 'label',
       }"
       node-key="id"
+      :current-node-key="navList[0].id"
       highlight-current
       @node-click="handleNodeClick"
       icon-class="el-icon-circle-plus-outline"
@@ -30,7 +31,9 @@
 export default {
   computed: {
     navList() {
-      return this.$seStorage.get("navList");
+      let list = this.$seStorage.get("navList");
+      this.$store.commit("chagePage", list[0].id);
+      return list;
     },
   },
   methods: {
