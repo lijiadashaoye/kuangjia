@@ -385,7 +385,7 @@ export default {
             font-family: AppleColorEmoji;
             color: #101821;
             line-height: 30px;
-            padding: 3px 0 0 47px;
+            padding: 2px 0 0 47px;
           }
         }
       }
