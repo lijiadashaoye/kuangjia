@@ -1,7 +1,8 @@
 <template>
   <div class="app">
     <nav>
-      <router-link to="/content/page2/page2_1">page2-1</router-link>
+      <router-link to="/content/page2/page2_1">page2-1</router-link> |
+      <router-link to="/content/page2">page2</router-link>
     </nav>
     <router-view />
   </div>
