@@ -6,13 +6,11 @@ const zopfli = require("@gfx/zopfli");
 const BrotliPlugin = require("brotli-webpack-plugin");
 const gZipRreg = new RegExp(`\\.(${['js', 'css', 'png', 'jpg', 'svg'].join('|')})$`);
 
-// 全局变量 .env 文件里定义的
-// console.log(process.env.NB);
 // 环境判断
 module.exports = {
     assetsDir: 'assets',
     productionSourceMap: false,
-    publicPath: process.env.NODE_ENV === 'production' ? './' : '/',
+    publicPath: process.env.NODE_ENV !== 'development' ? './' : '/',
     devServer: {
         open: true,
         port: '5432',
@@ -34,7 +32,7 @@ module.exports = {
             chunkFilename: 'js/[name].js',
             crossOriginLoading: "anonymous",
         });
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV !== 'development') {
             // 开启分离js
             config.optimization = {
                 chunkIds: 'size',
@@ -44,7 +42,7 @@ module.exports = {
                     maxAsyncRequests: Infinity, // 最大的按需(异步)加载次数，默认为 6。
                     maxInitialRequests: Infinity, // 打包后的入口文件加载时，还能同时加载js文件的数量（包括入口文件），默认为4。
                     maxSize: 100000, // 100k 把提取出来的模块打包生成的文件大小不能超过maxSize值，如果超过了，要对其进行分割并打包生成新的文件
-                    name: () => 'nb',
+                    name: () => 'base',
                     cacheGroups: { // 配置提取模块的方案
                         // 其余选项和外面一致，若cacheGroups每项中有，就按配置的，没有就使用外面配置的。
                         vendor: {
@@ -72,10 +70,10 @@ module.exports = {
         // 修改title
         config.plugin('html')
             .tap(args => {
-                args[0].title = '结合node的框架'
+                args[0].title = '纯净前端框架'
                 return args
             });
-        if (process.env.NODE_ENV === 'production') {
+        if (process.env.NODE_ENV !== 'development') {
             // 使用进度条显示打包进度
             config.plugin('webpackBar')
                 .use(new WebpackBar());

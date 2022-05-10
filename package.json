@@ -5,6 +5,7 @@
     "scripts": {
         "start": "vue-cli-service serve",
         "build": "vue-cli-service build",
+        "test": "vue-cli-service build --mode test",
         "node": "concurrently \"node node.js\" \"npm start\""
     },
     "dependencies": {
@@ -31,8 +32,7 @@
         "concurrently": "^7.0.0",
         "element-ui": "^2.15.6",
         "uglifyjs-webpack-plugin": "^2.2.0",
-        "webpackbar": "^5.0.2",
-        "xlsx": "^0.18.2"
+        "webpackbar": "^5.0.2"
     },
     "eslintConfig": {
         "root": true,

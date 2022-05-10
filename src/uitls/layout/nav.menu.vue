@@ -8,7 +8,7 @@
   >
     <div class="changeNavShow">
       <div v-show="$store.state.showNav">
-        <span @click="toMainPage">框架</span>
+        <span>框架</span>
       </div>
       <div
         @click="$store.commit('showNavFn')"
@@ -45,23 +45,6 @@ export default {
     selectFn(t) {
       this.$store.commit("chagePage", t);
     },
-    toMainPage() {
-      this.$confirm(
-        "退出并清空所有之前的操作，使页面回到刚登录状态！",
-        "提示",
-        {
-          confirmButtonText: "确定",
-          cancelButtonText: "取消",
-        }
-      )
-        .then(() => {
-          this.$message({
-            type: "success",
-            message: "初始化",
-          });
-        })
-        .catch(() => {});
-    },
   },
 };
 </script>
@@ -90,13 +73,9 @@ $height: 50px;
     width: 100%;
     padding-left: 10px;
     > span:nth-child(1) {
-      cursor: pointer;
       font-size: 22px;
       font-weight: bold;
       color: rgb(97, 96, 96);
-      &:hover {
-        color: black;
-      }
     }
   }
   > div:nth-of-type(2) {

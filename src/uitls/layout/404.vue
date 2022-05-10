@@ -3,11 +3,27 @@
     <span>4</span>
     <span>0</span>
     <span>4</span>
+    <div>
+      <el-button size="small" @click="back(1)">返回上一页</el-button>
+      <el-button size="small" @click="back(2)">返回主页</el-button>
+    </div>
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  methods: {
+    back(num) {
+      if (num === 1) {
+        history.go(-1);
+      } else {
+        this.$router.push({
+          name: "content",
+        });
+      }
+    },
+  },
+};
 </script>
 
 <style scoped lang='scss'>
@@ -16,7 +32,7 @@ $left: 39%;
   height: 100%;
   position: relative;
   overflow: hidden;
-  span {
+  > span {
     position: absolute;
     font-size: 150px;
     top: 30%;
@@ -32,6 +48,11 @@ $left: 39%;
   > span:nth-child(3) {
     animation: span3 4s;
     left: calc(#{$left} + 205px);
+  }
+  > div {
+    position: absolute;
+    top: 55%;
+    left: calc(#{$left} + 52px);
   }
 }
 @keyframes span1 {

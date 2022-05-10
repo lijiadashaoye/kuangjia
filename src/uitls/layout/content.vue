@@ -1,10 +1,12 @@
 <template>
   <div class="wap" v-if="hasLogin">
     <div class="title">
-      <img src="@/assets/img/tt.svg" />
+      <p @click="toMainPage">
+        <img src="@/assets/img/tt.svg" />
+        <span>欢迎使用</span>
+      </p>
       <div class="titlt_right">
         <i class="el-icon-question questionIcon" title="常见问题解答"></i>
-
         <el-dropdown @command="toWhere">
           <div class="dropDown">
             <el-avatar
@@ -28,7 +30,6 @@
         <router-view></router-view>
       </div>
     </div>
-
     <el-dialog
       title="提示"
       :close-on-click-modal="false"
@@ -83,10 +84,7 @@ export default {
     "$store.state.page": function (navId) {
       if (navId !== "login") {
         this.$router.push({
-          path: `/content/${navId}`,
-          query: {
-            com: navId.name,
-          },
+          name: navId,
         });
       }
     },
@@ -116,6 +114,23 @@ export default {
         name: "login",
       });
     },
+    toMainPage() {
+      this.$confirm(
+        "退出并清空所有之前的操作，使页面回到刚登录状态！",
+        "提示",
+        {
+          confirmButtonText: "确定",
+          cancelButtonText: "取消",
+        }
+      )
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "初始化",
+          });
+        })
+        .catch(() => {});
+    },
   },
 };
 </script>
@@ -134,10 +149,25 @@ export default {
   justify-content: space-between;
   align-items: center;
   box-shadow: 0 0 2px 0 rgb(209, 208, 208);
-  > img {
-    height: 35px;
+  > p {
+    height: 40px;
     margin-left: 20px;
+    cursor: pointer;
+    > img {
+      height: 100%;
+      vertical-align: -6px;
+      margin-right: 10px;
+    }
+    > span {
+      font-size: 30px;
+      font-weight: bold;
+      display: inline-block;
+    }
+    &:hover span {
+      transform: scale(0.95);
+    }
   }
+
   .titlt_right {
     display: flex;
     justify-content: flex-end;
@@ -170,8 +200,7 @@ export default {
   .showContent {
     width: 100%;
     height: 100%;
-    overflow-y: auto;
-    background: rgb(190, 131, 131);
+    overflow: hidden;
   }
 }
 .pages {

@@ -12,45 +12,6 @@ const fileType = {
     'woff': 'application/font-woff',
     'ttf': 'application/x-font-ttf'
 }
-let makeNav = [{
-    id: 'page1',
-    label: 'page1',
-    icon: 'el-icon-video-camera-solid',
-}, {
-    id: 'page2',
-    label: 'page2',
-    icon: 'el-icon-location',
-    children: [{
-            id: '2-1',
-            label: 'page2-1'
-        },
-        {
-            id: '2-2',
-            label: 'page2-2'
-        },
-    ]
-}, {
-    id: '3',
-    label: 'page3',
-    icon: 'el-icon-video-camera-solid',
-    children: [{
-        id: '3-1',
-        label: 'page3-1',
-        children: [{
-            id: '3-1-1',
-            label: 'page3-1-1',
-            children: [{
-                    id: '3-1-1-1',
-                    label: 'page3-1-1-1'
-                },
-                {
-                    id: '3-1-1-2',
-                    label: 'page3-1-1-2'
-                },
-            ]
-        }]
-    }]
-}]; // 导航数据
 http.createServer(function (req, res) {
     res.writeHead(200, {
         'Access-Control-Allow-Origin': '*',
@@ -92,70 +53,6 @@ http.createServer(function (req, res) {
                         res.end(JSON.stringify(arr));
                     });
                     break;
-                case 'system':
-                    obj = {
-                        versionData: "当前版本 Beta 0.6",
-                        mainInfoData: {
-                            title: '功能简介',
-                            list: [
-                                [{
-                                        id: 1,
-                                        text: "数据库设计工具、代码生成工具、文档生成工具、生成规则模板库",
-                                    },
-                                    {
-                                        id: 2,
-                                        text: "自定义模板扩展库管理、业务组件模板、项目管理、安全管理等",
-                                    },
-                                    {
-                                        id: 3,
-                                        text: "伺服电缸山东分公司的复古风格你吃不吃VB",
-                                    }
-                                ],
-                                [{
-                                        id: 3,
-                                        text: "agsdfgdgdfgsdf",
-                                    },
-                                    {
-                                        id: 4,
-                                        text: "sef5tyw54hrdfghghjgfh",
-                                    },
-                                    {
-                                        id: 5,
-                                        text: "公司垫付你的风格女车陂南地铁供热管二",
-                                    },
-                                ],
-                                [{
-                                        id: 6,
-                                        text: "hfghl/.k,jhngbvefwdwerthdgch",
-                                    },
-                                    {
-                                        id: 7,
-                                        text: "数据大馒头也是WEZDGXFHTGR",
-                                    },
-                                    {
-                                        id: 8,
-                                        text: "342qwe67t8oyihlkgjhmgnfbdcs",
-                                    },
-                                ],
-                            ]
-                        },
-                        featureList: ["提高编码质量", "解决重复编码工作", "提升开发效率"],
-                        tip: [
-                            "tip1 tip1 tip1 tip1 tip1 tip1 tip1 ",
-                            "新增某某某，某某某某",
-                            "修改某某某某某某某某某某某某，某某某某",
-                        ],
-                        yinsi: [
-                            "隐私政策11111111111111111",
-                            "隐私政策2222222222222222222222222",
-                        ],
-                        xieyi: [
-                            '用户服务协议11111111111',
-                            '用户服务协议2222222222222222',
-                        ]
-                    }
-                    res.end(JSON.stringify(obj));
-                    break;
                 case 'login':
                     // 用户登录
                     req.on('data', c => {
@@ -165,10 +62,53 @@ http.createServer(function (req, res) {
                         obj = {
                             ...JSON.parse(data.toString()),
                             token: 'token1111',
-                            navList: makeNav
                         }
                         res.end(JSON.stringify(obj));
                     })
+                    break;
+                case 'navList':
+                    let navList = [{
+                        id: 'page1',
+                        label: 'page1',
+                        icon: 'el-icon-video-camera-solid',
+                    }, {
+                        id: 'page2',
+                        label: 'page2',
+                        icon: 'el-icon-location',
+                        children: [{
+                            id: 'page2_1',
+                            label: 'page2-1'
+                        }]
+                    }, {
+                        id: '3',
+                        label: 'page3',
+                        icon: 'el-icon-video-camera-solid',
+                        children: [{
+                            id: '3-1',
+                            label: 'page3-1',
+                            children: [{
+                                id: '3-1-1',
+                                label: 'page3-1-1',
+                                children: [{
+                                        id: '3-1-1-1',
+                                        label: 'page3-1-1-1'
+                                    },
+                                    {
+                                        id: '3-1-1-2',
+                                        label: 'page3-1-1-2'
+                                    },
+                                ]
+                            }]
+                        }]
+                    }, {
+                        id: 'introduce',
+                        label: '框架介绍',
+                        icon: 'el-icon-message-solid',
+                    }]; // 导航数据
+                    res.end(JSON.stringify(navList));
+                    break;
+                case 'system':
+                    res.end('纯净的前端框架');
                     break;
             }
             break;

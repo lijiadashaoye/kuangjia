@@ -8,7 +8,7 @@ if (dir.length) {
             `import Vue from 'vue';\nimport Vuex from 'vuex';\n`,
             `Vue.use(Vuex);let page = sessionStorage.getItem("page"),showNav = sessionStorage.getItem("showNav");`,
             `export default new Vuex.Store({modules: {`,
-            `}, state: {page:page?page:null /* 记录被选中的导航 */,showNav:showNav?showNav:true/* 导航模式为menu时，导航宽度展开与折叠 */
+            `}, state: {page:page?page:null /* 记录被选中的导航 */,showNav:showNav?showNav:true/* 导航模式为menu时，导航宽度展开与折叠 */,
         },mutations: {
                 /* 退出系统初始化所有数据 */resetDatas(state) {state.page =null;state.showNav= true;Object.keys(sessionStorage).forEach((str)=>{if(str != "userInfo"){sessionStorage.removeItem(str)}})},
                 /* 导航点击切换页面 */chagePage(state, str) {state.page = str},
@@ -55,15 +55,16 @@ if (dir.length) {
         ],
         imports = '',
         modules = '',
-        AppFile = '',
-        routerFile = '',
+        routerFile = [],
         urlImport = '',
         urlModule = '',
         componentsImport = "import Vue from 'vue'\n",
         componentsFile = '';
-
     for (let i = 0; i < dir.length; i++) {
-        let content = fs.readdirSync(`${pagePath}/${dir[i]}`);
+        let content = fs.readdirSync(`${pagePath}/${dir[i]}`),
+            dirApp = '',
+            dirChildren = '';
+
         for (let j = 0; j < content.length; j++) {
             let str = content[j],
                 store = /store/ig,
@@ -89,35 +90,35 @@ if (dir.length) {
             if (router.test(str)) {
                 let stat = fs.statSync(nowPath);
                 if (stat.isFile()) {
-                    routerFile += `require('@/views/${dir[i]}/${str}').default,`
+                    dirChildren += `...require('@/views/${dir[i]}/${str}').default,`
                 } else {
                     let arr = fs.readdirSync(`${pagePath}/${dir[i]}/${str}`);
                     for (let k = 0; k < arr.length; k++) {
-                        routerFile += `...require('@/views/${dir[i]}/${str}/${arr[k]}').default,`
+                        dirChildren += `...require('@/views/${dir[i]}/${str}/${arr[k]}').default,`
                     }
                 }
             }
             if (App.test(str)) {
-                AppFile = `{
+                dirApp = `{
                     path: '/content/${dir[i]}', 
                     name: '${dir[i]}',
                     component: () => import('@/views/${dir[i]}/${str}'),
                     children:[`
             }
             if (url.test(str)) {
-                let name = str.split('.')[0]
-                urlModule += `...${name},`
-                urlImport += `import ${name} from '@/views/${dir[i]}/${str}';\n`
+                urlModule += `...${dir[i]},`
+                urlImport += `import ${dir[i]} from '@/views/${dir[i]}/${str}';\n`
             }
             if (components.test(str)) {
                 let arr = fs.readdirSync(`${pagePath}/${dir[i]}/${str}`);
                 for (let k = 0; k < arr.length; k++) {
                     let name = arr[k].split('.')[0];
-                    componentsImport += `import ${name} from '@/views/${dir[i]}/${str}/${arr[i]}';\n`
+                    componentsImport += `import ${name} from '@/views/${dir[i]}/${str}/${arr[k]}';\n`
                     componentsFile += `Vue.component('${name}', ${name})\n`
                 }
             }
         }
+        routerFile.push(dirApp + dirChildren + ']},')
     }
     // 自动写入 store.js 文件
     fs.unlink(storePath, () => {
@@ -128,7 +129,7 @@ if (dir.length) {
     })
     // 自动写入 router.js 文件
     fs.unlink(routePath, () => {
-        let strs = `${routerArr[0]+routerArr[1]+AppFile + routerFile + ']},'+routerArr[2]}`
+        let strs = `${routerArr[0]+routerArr[1]+ routerFile.join('') +routerArr[2]}`
         fs.writeFile(routePath, strs, () => {
             console.log('router 写入成功')
         })
@@ -141,7 +142,7 @@ if (dir.length) {
             console.log('allUrl 写入成功')
         })
     })
-
+    // 读取每个views里的components文件夹
     let arr = fs.readdirSync(`${__dirname}/src/components`);
     for (let k = 0; k < arr.length; k++) {
         let name = arr[k].split('.')[0];

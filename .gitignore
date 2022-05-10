@@ -1,7 +1,10 @@
 .DS_Store
 node_modules
 /dist
-
+src/uitls/allUrl.js
+src/uitls/router.js
+src/uitls/store.js
+src/uitls/component.js
 
 # local env files
 .env.local

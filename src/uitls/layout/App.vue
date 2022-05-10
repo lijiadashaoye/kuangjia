@@ -8,7 +8,7 @@ export default {
       hasInit: false,
     };
   },
-  mounted() {
+  created() {
     let pubFn = require("../pubFn").default,
       allUrl = require("../allUrl").default,
       proto = Object.getPrototypeOf(this.$root);

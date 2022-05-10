@@ -1,13 +1,10 @@
 <template>
   <div id="login">
     <!-- 画背景组件，可以不用 -->
-    <BackGround @systemDataEmit="(t) => (systemData = t)" ref="backGround" />
+    <BackGround />
     <!-- 登录表单区域 -->
     <div class="inputInfo">
       <p class="inputInfo_title">欢迎登录</p>
-      <p v-if="systemData" class="inputInfo_subTitle">
-        {{ systemData.versionData }}
-      </p>
       <!-- 登录表单区域 -->
       <el-form
         label-width="0px"
@@ -77,14 +74,28 @@
           class="el-icon-circle-check"
           :style="{ color: argument ? '#409EFF' : '', 'font-weight': 'bold' }"
         ></i>
-
-        <span @click="$refs.backGround.showText('隐私政策')">《隐私政策》</span
-        >|
-        <span @click="$refs.backGround.showText('用户服务协议')"
-          >《用户服务协议》</span
-        >
+        <span @click="showText('隐私政策')">《隐私政策》</span>|
+        <span @click="showText('用户服务协议')">《用户服务协议》</span>
       </p>
     </div>
+
+    <el-dialog
+      :append-to-body="true"
+      :show-close="false"
+      :close-on-click-modal="false"
+      :title="dialog.title"
+      :visible.sync="dialog.visible"
+      width="600"
+    >
+      <div>
+        {{ dialog.content }}
+      </div>
+      <span slot="footer" class="dialog-footer">
+        <el-button size="small" @click="dialog.visible = false"
+          >关 闭</el-button
+        >
+      </span>
+    </el-dialog>
   </div>
 </template>
 
@@ -113,7 +124,12 @@ export default {
       rember: true, // 是否记住用户密码数据
       argument: true, // 隐私政策是否已勾选
       canSee: false, // 切换密码的可见性
-      systemData: {},
+      dialog: {
+        // 点击隐私政策的介绍弹框
+        title: "",
+        visible: false,
+        content: "",
+      },
     };
   },
   beforeCreate() {
@@ -134,6 +150,11 @@ export default {
     window.removeEventListener("keydown", this.keyDown);
   },
   methods: {
+    showText(text) {
+      this.dialog.title = text;
+      this.dialog.content = text;
+      this.dialog.visible = true;
+    },
     keyDown(e) {
       //如果是回车则执行登录方法
       if (e.keyCode == 13) {
@@ -153,43 +174,53 @@ export default {
               method: "post",
               url: this.$url.login,
               data: params,
-            }).then((res) => {
-              if (res) {
-                this.$seStorage.set("navList", res.navList);
-                this.$seStorage.set("token", res.token);
-                this.$seStorage.set("username", res.username);
-                // 根据服务器返回的数据决定使用的nav组件类型
-                if (this.rember) {
-                  this.$seStorage.set("userInfo", {
-                    password: res.password,
-                    username: res.username,
-                    rember: this.rember,
-                  });
-                }
-                this.$confirm(
-                  "使用基于 elemtntUI 组件的什么类型的导航？",
-                  "提示",
-                  {
-                    confirmButtonText: "NavMenu 导航菜单",
-                    cancelButtonText: "Tree 树形控件",
-                    closeOnClickModal: false,
-                    showClose: false,
+            })
+              .then((res) => {
+                return this.$axios({
+                  method: "post",
+                  url: this.$url.navList,
+                  data: params,
+                }).then((navList) => {
+                  return { ...res, navList };
+                });
+              })
+              .then((res) => {
+                if (res) {
+                  this.$seStorage.set("navList", res.navList);
+                  this.$seStorage.set("token", res.token);
+                  this.$seStorage.set("username", res.username);
+                  // 根据服务器返回的数据决定使用的nav组件类型
+                  if (this.rember) {
+                    this.$seStorage.set("userInfo", {
+                      password: res.password,
+                      username: res.username,
+                      rember: this.rember,
+                    });
                   }
-                )
-                  .then(() => {
-                    this.$seStorage.set("navCom", "menu");
-                    this.$router.push({
-                      name: "content",
+                  this.$confirm(
+                    "使用基于 elemtntUI 组件的什么类型的导航？",
+                    "提示",
+                    {
+                      confirmButtonText: "NavMenu 导航菜单",
+                      cancelButtonText: "Tree 树形控件",
+                      closeOnClickModal: false,
+                      showClose: false,
+                    }
+                  )
+                    .then(() => {
+                      this.$seStorage.set("navCom", "menu");
+                      this.$router.push({
+                        name: "content",
+                      });
+                    })
+                    .catch(() => {
+                      this.$seStorage.set("navCom", "tree");
+                      this.$router.push({
+                        name: "content",
+                      });
                     });
-                  })
-                  .catch(() => {
-                    this.$seStorage.set("navCom", "tree");
-                    this.$router.push({
-                      name: "content",
-                    });
-                  });
-              }
-            });
+                }
+              });
           }
         });
       } else {
@@ -217,14 +248,14 @@ export default {
 }
 .inputInfo {
   position: absolute;
-  bottom: 80px;
-  left: 200px;
+  top: 80px;
+  right: 200px;
   width: 300px;
   z-index: 10;
   background: #ffffff;
   box-shadow: 0px 3px 8px 0px rgba(0, 123, 255, 0.26);
-  border-radius: 2px;
-  padding: 40px 30px 30px 30px;
+  border-radius: 5px;
+  padding: 30px;
   .inputInfo_title {
     font-size: 30px;
     font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
@@ -232,7 +263,7 @@ export default {
     color: #007bff;
     line-height: 40px;
     text-align: center;
-    padding-top: 10px;
+    padding: 10px 0;
   }
   .inputInfo_subTitle {
     font-size: 12px;

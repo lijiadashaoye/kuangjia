@@ -21,10 +21,18 @@ import Vue from 'vue';import VueRouter from 'vue-router';import Login from '@/ui
                             name: 'content',
                             path: '/content',
                             component: () =>import('@/uitls/layout/content')/* 主要内容显示组件 */,children: [{
+                    path: '/content/introduce', 
+                    name: 'introduce',
+                    component: () => import('@/views/introduce/App.vue'),
+                    children:[...require('@/views/introduce/router/index.js').default,]},{
                     path: '/content/page1', 
                     name: 'page1',
                     component: () => import('@/views/page1/App.vue'),
-                    children:[...require('@/views/page1/router/index.js').default,]},]},{
+                    children:[...require('@/views/page1/router/index.js').default,]},{
+                    path: '/content/page2', 
+                    name: 'page2',
+                    component: () => import('@/views/page2/App.vue'),
+                    children:[...require('@/views/page2/router.js').default,]},]},{
             path: '*',
             component: () =>import('@/uitls/layout/404') /* 404组件 */
         }];

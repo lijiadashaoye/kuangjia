@@ -1,7 +1,13 @@
 export default {
-  namespace: true,
-  state: {},
+  namespaced: true,
+  state: {
+    page: 'page1'
+  },
   getters: {},
-  mutations: {},
+  mutations: {
+    changePage(state, page) {
+      state.page = page
+    },
+  },
   actions: {}
 }

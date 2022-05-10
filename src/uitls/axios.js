@@ -2,8 +2,10 @@ import axios from "axios"; // vue的http功能
 import {
     Message
 } from "element-ui";
-// vue的http功能
-axios.defaults.baseURL = process.env.NODE_ENV === "development" ? '' : '';
+
+// 根据环境设置域名
+// axios.defaults.baseURL = process.env.NODE_ENV === "development" ? '' : '';
+
 // 添加一个请求拦截器
 axios.interceptors.request.use(config => {
     let user = localStorage.getItem("userInfo");
